@@ -1,75 +1,76 @@
 <template>
-	<div class="px-1">
-		<section class="section_poster mb-5">
-			<div
-				class="h-100 d-flex justify-content-start align-items-center text-start"
-			>
-				<div class="title text-white p-3 ms-4">
-					<h2 class="fw-bold fs-1 m-0">Добро пожаловать.</h2>
-					<h3 class="fs-2.fw-600">
-						Миллионы фильмов, сериалов и людей. Исследуйте сейчас.
-					</h3>
+	<div class="container-xl">
+		<div class="bg-white">
+			<section class="section_poster mb-5">
+				<div
+					class="h-100 d-flex justify-content-start align-items-center text-start"
+				>
+					<div class="title text-white p-3 ms-4">
+						<h2 class="fw-bold fs-1 m-0">Добро пожаловать.</h2>
+						<h3 class="fs-2.fw-600">
+							Миллионы фильмов, сериалов и людей. Исследуйте сейчас.
+						</h3>
+					</div>
 				</div>
-			</div>
-		</section>
+			</section>
 
-		<section class="section_popular mb-5">
-			<!-- <router-link
+			<section class="section_popular mb-5">
+				<!-- <router-link
         to="/popular"
         class="border-start border-5 border-warning fs-3 fw-600 ps-2 nav-link p-0 mb-2"
         style="color: #121212"
       >
         Popular
       </router-link> -->
-			<!-- <AppLink>Popular</AppLink> -->
+				<!-- <AppLink>Popular</AppLink> -->
 
-			<AppTitleLink to="/popular">Popular</AppTitleLink>
+				<AppTitleLink to="/popular">Popular</AppTitleLink>
 
-			<SwiperSlider
-				:data="popularMovies"
-				:breakpoints="breakpointsPopular"
-				scrollbar
-				#="{ item }"
-			>
-				<AppCardMovies
-					:item="item"
-					card-size="sm_card"
-					@click="getMovieId(item.id)"
-				/>
-			</SwiperSlider>
-		</section>
-
-		<section class="section_born">
-			<AppTitle>Born today</AppTitle>
-			<SwiperSlider
-				:data="bornTodayList"
-				:breakpoints="breakpointsBornToday"
-				#="{ item, index }"
-			>
-				<div
-					:key="index"
-					class="card border-0 align-items-center"
+				<SwiperSlider
+					:data="popularMovies"
+					:breakpoints="breakpointsPopular"
+					scrollbar
+					#="{ item }"
 				>
-					<img
-						:src="item.photo"
-						class=""
-						style="width: 100%; max-height: 190px; object-fit: contain"
+					<AppCardMovies
+						:item="item"
+						card-size="sm_card"
+						@click="getMovieId(item.id)"
 					/>
+				</SwiperSlider>
+			</section>
 
-					<div class="card-body p-0">
-						<a class="card-title fs-6 fw-600 text-dark text-decoration-none">
-							{{ item.enName }}
-						</a>
-						<p class="card-text">{{ item.age }}</p>
+			<section class="section_born">
+				<AppTitle>Born today</AppTitle>
+				<SwiperSlider
+					:data="bornTodayList"
+					:breakpoints="breakpointsBornToday"
+					#="{ item, index }"
+				>
+					<div
+						:key="index"
+						class="card border-0 align-items-center"
+					>
+						<img
+							:src="item.photo"
+							class=""
+							style="width: 100%; max-height: 190px; object-fit: contain"
+						/>
+
+						<div class="card-body p-0">
+							<a class="card-title fs-6 fw-600 text-dark text-decoration-none">
+								{{ item.enName }}
+							</a>
+							<p class="card-text">{{ item.age }}</p>
+						</div>
 					</div>
-				</div>
-			</SwiperSlider>
-		</section>
-		<!--
+				</SwiperSlider>
+			</section>
+			<!--
 		<section class="section_trending mb-5">
 			<h3 class="border-start border-5 border-warning fw-600 ps-2">Rending</h3> -->
 
-		<!-- <SwiperSlider
+			<!-- <SwiperSlider
         :data="data"
         #="{ item }"
       >
@@ -78,7 +79,8 @@
           card-size="smCard"
         />
       </SwiperSlider> -->
-		<!-- </section> -->
+			<!-- </section> -->
+		</div>
 	</div>
 </template>
 
@@ -259,9 +261,5 @@ const breakpointsBornToday = {
 	background-repeat: no-repeat;
 	height: 300px;
 	width: 100%;
-}
-
-.fw-600 {
-	font-weight: 600;
 }
 </style>

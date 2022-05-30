@@ -229,10 +229,10 @@ const addToWatchLater = () => {
 .actions {
 	position: relative;
 
-	button:focus {
+	.btn:focus {
 		box-shadow: none !important;
 	}
-	button:hover {
+	.btn:hover {
 		background-color: #f1f1f1 !important;
 	}
 

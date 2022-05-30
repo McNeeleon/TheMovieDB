@@ -655,72 +655,74 @@ const breakpoints = {
 </script>
 
 <template>
-	<div
-		v-if="!isLoading"
-		class="media p-3 md-4"
-	>
-		<MediaCardMovies :media-data="mediaData" />
+	<div class="container-xl bg-white">
+		<div
+			v-if="!isLoading"
+			class="media p-3 md-4"
+		>
+			<MediaCardMovies :media-data="mediaData" />
 
-		<div class="media-info">
-			<div class="description mb-5">
-				<h4 class="fw-600">Описание</h4>
-				<p>
-					{{ mediaData.plot }}
-				</p>
-			</div>
-			<div class="star-rating mb-5">
-				<AppRating @set-rating="setRating" />
-			</div>
+			<div class="media-info">
+				<div class="description mb-5">
+					<h4 class="fw-600">Описание</h4>
+					<p>
+						{{ mediaData.plot }}
+					</p>
+				</div>
+				<div class="star-rating mb-5">
+					<AppRating @set-rating="setRating" />
+				</div>
 
-			<div
-				ref="obser"
-				class="media-images mb-4"
-			>
-				<template v-if="!isImgLoad">
-					<h3
-						class="border-start border-5 border-warning ps-2 p-0 mb-3"
-						style="cursor: pointer"
-						@click="opneMediaViewer(0)"
-					>
-						Photos {{ mediaImages.length + 1 }}
-					</h3>
-
-					<SwiperSlider
-						:data="mediaImages.slice(0, 9)"
-						:slides-view="2"
-						:breakpoints="breakpoints"
-						#="{ item, id }"
-					>
-						<div
-							class="mb-4"
-							style="max-width: 210px; height: 210px; cursor: pointer"
+				<div
+					ref="obser"
+					class="media-images mb-4"
+				>
+					<template v-if="!isImgLoad">
+						<h3
+							class="border-start border-5 border-warning ps-2 p-0 mb-3"
+							style="cursor: pointer"
+							@click="opneMediaViewer(0)"
 						>
-							<img
-								style="width: 100%; height: 100%; object-fit: cover"
-								:src="item.image"
-								:alt="item.title"
-								@click="opneMediaViewer(id)"
-							/>
-						</div>
-					</SwiperSlider>
+							Photos {{ mediaImages.length + 1 }}
+						</h3>
 
-					<AppImageViewer
-						v-if="isMediaViewer"
-						:initial-slide="initialSlide"
-						:images-list="mediaImages"
-						@close-media-viewer="closeMediaViewer"
-					></AppImageViewer>
-				</template>
+						<SwiperSlider
+							:data="mediaImages.slice(0, 9)"
+							:slides-view="2"
+							:breakpoints="breakpoints"
+							#="{ item, id }"
+						>
+							<div
+								class="mb-4"
+								style="max-width: 210px; height: 210px; cursor: pointer"
+							>
+								<img
+									style="width: 100%; height: 100%; object-fit: cover"
+									:src="item.image"
+									:alt="item.title"
+									@click="opneMediaViewer(id)"
+								/>
+							</div>
+						</SwiperSlider>
 
-				<AppPreloader v-else />
-			</div>
+						<AppImageViewer
+							v-if="isMediaViewer"
+							:initial-slide="initialSlide"
+							:images-list="mediaImages"
+							@close-media-viewer="closeMediaViewer"
+						></AppImageViewer>
+					</template>
 
-			<div class="top-cast">
-				<MediaTopCast :actor-list="mediaData.actorList" />
+					<AppPreloader v-else />
+				</div>
+
+				<div class="top-cast">
+					<MediaTopCast :actor-list="mediaData.actorList" />
+				</div>
 			</div>
 		</div>
+		<div v-else>EMPTY</div>
 	</div>
-	<div v-else>EMPTY</div>
 </template>
 
 <style lang="scss">

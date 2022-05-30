@@ -15,6 +15,11 @@ const routes = [
 		component: MediaView,
 		props: true,
 	},
+	{
+		path: '/user',
+		name: 'user',
+		component: () => import('../views/UserView.vue'),
+	},
 ];
 
 const router = createRouter({

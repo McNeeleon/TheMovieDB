@@ -6,7 +6,7 @@ const props = defineProps({
 	},
 });
 
-const checkForEmpty = (val) => (val === '' ? '—' : val);
+const checkForVoid = (val) => (val === '' ? '—' : val);
 
 const getMergeedData = Object.keys(props.mediaInfo).reduce((acc, curr) => {
 	if (typeof props.mediaInfo[curr] === 'object') {
@@ -15,10 +15,10 @@ const getMergeedData = Object.keys(props.mediaInfo).reduce((acc, curr) => {
 				continue;
 			}
 
-			acc[key] = checkForEmpty(props.mediaInfo[curr][key]);
+			acc[key] = checkForVoid(props.mediaInfo[curr][key]);
 		}
 	} else {
-		acc[curr] = checkForEmpty(props.mediaInfo[curr]);
+		acc[curr] = checkForVoid(props.mediaInfo[curr]);
 	}
 	return acc;
 }, {});

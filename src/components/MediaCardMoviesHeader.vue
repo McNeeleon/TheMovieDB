@@ -1,6 +1,6 @@
 <template>
 	<div
-		class="card-header d-flex flex-column flex-md-row justify-content-between align-items-center mb-2"
+		class="card-header d-flex flex-column flex-md-row flex-wrap justify-content-between align-items-center mb-2 p-0"
 	>
 		<h1 class="media-title fw-600 me-2 mb-0">{{ headerInfo.title }}</h1>
 		<!-- <div class="facts">
@@ -99,8 +99,15 @@ console.log(props.headerInfo);
 	}
 
 	.media-rating {
-		.rating-type + .rating-type {
-			margin-left: 20px;
+		.rating-type {
+			display: flex;
+			flex-flow: column;
+			align-items: center;
+			text-align: center;
+
+			& + .rating-type {
+				margin-left: 20px;
+			}
 		}
 
 		.rating-title {
