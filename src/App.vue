@@ -5,7 +5,7 @@ import TheFooter from './components/TheFooter.vue';
 
 <template>
 	<TheHeader />
-	<main class="py-0 py-md-3 px-1 px-xl-0">
+	<main class="main py-0 py-md-3 px-1 px-xl-0">
 		<router-view></router-view>
 	</main>
 	<TheFooter />
@@ -16,14 +16,16 @@ import TheFooter from './components/TheFooter.vue';
 	font-family: 'Source Sans Pro';
 	-webkit-font-smoothing: antialiased;
 	-moz-osx-font-smoothing: grayscale;
-	/* text-align: center; */
 
 	display: flex;
 	flex-direction: column;
 	min-height: 100vh;
-	justify-content: space-between;
+	/* justify-content: space-between; */
 
 	background-color: rgb(245, 245, 245);
+}
+.main {
+	flex: 1 0 auto;
 }
 
 .fw-600 {

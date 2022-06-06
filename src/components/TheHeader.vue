@@ -140,12 +140,13 @@
 							hover
 							arrow
 						>
-							<a
+							<router-link
+								to="/user"
 								href="#"
 								class="nav-link p-0"
 							>
 								<span class="avatar blue">N</span>
-							</a>
+							</router-link>
 						</div>
 					</li>
 

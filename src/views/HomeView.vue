@@ -95,14 +95,14 @@ import AppCardMovies from '../components/AppCardMovies.vue';
 import AppTitleLink from '../components/AppTitleLink.vue';
 import AppTitle from '../components/AppTitle.vue';
 
-import ImdbApi from '../api/imdb-api';
+import moviesApi from '../api/movies-api';
 
 const router = useRouter();
 
 const popularMovies = ref({});
 
 onMounted(() => {
-	ImdbApi.getMostPopularMovies().then((response) => {
+	moviesApi.getMostPopularMovies().then((response) => {
 		popularMovies.value = response.items;
 	});
 });

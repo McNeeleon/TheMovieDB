@@ -13,6 +13,10 @@ const props = defineProps({
 	},
 });
 
+const emit = defineEmits(['addToWatchList']);
+
+const addToWatchList = (options) => emit('addToWatchList', options);
+
 const infoMap = [
 	'year',
 	'countries',
@@ -83,7 +87,7 @@ const mediaInfo = infoMap.reduce((acc, curr) => {
 						class="mb-3"
 					/>
 
-					<MrdiaActions />
+					<MrdiaActions @add-to-watch-list="addToWatchList" />
 				</div>
 			</div>
 

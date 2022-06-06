@@ -1,18 +1,42 @@
+<script setup>
+import { computed, onMounted, ref } from 'vue';
+import { useMoviesCounterStore } from '../stores/moviesCounter';
+import AppPreloader from './AppPreloader.vue';
+
+const moviesCounterStore = useMoviesCounterStore();
+
+const isLoading = ref(true);
+
+const loadData = async () => {
+	isLoading.value = true;
+	await moviesCounterStore.loadCounterMovies();
+	isLoading.value = false;
+};
+
+onMounted(loadData);
+
+const moviesCounter = computed(() => moviesCounterStore.getMoviesCounter);
+</script>
+
 <template>
-	<div class="profile">
+	<div
+		v-if="!isLoading"
+		class="profile"
+	>
 		<div
-			class="card mb-3 border-0 mb-2"
-			style="max-width: 500px"
+			class="card mb-3 border-0 mb-2 ps-4"
+			style=""
 		>
 			<div class="row g-0">
-				<div class="col-md-4">
+				<div class="col-md-3">
 					<img
 						src="https://imdb-api.com/images/original/MV5BMTk1MjM3NTU5M15BMl5BanBnXkFtZTcwMTMyMjAyMg@@._V1_Ratio1.0000_AL_.jpg"
 						class="img-fluid rounded-start"
+						style="max-width: 200px"
 						alt="..."
 					/>
 				</div>
-				<div class="col-md-8">
+				<div class="col-md-9">
 					<div class="card-body pt-0">
 						<h5
 							class="fs-4 fst-italic fw-bold color-555"
@@ -35,12 +59,9 @@
 			</div>
 		</div>
 
-		<ul
-			class="nav nav-tabs nav-fill"
-			style="background-color: #f8f9fa"
-		>
+		<ul class="nav nav-fill">
 			<li
-				v-for="(item, index) in arr"
+				v-for="(item, index) in moviesCounter"
 				:key="index"
 				class="nav-item p-0"
 			>
@@ -59,23 +80,20 @@
 			</li>
 		</ul>
 	</div>
+	<AppPreloader
+		v-else
+		size="full"
+	/>
 </template>
-
-<script setup>
-const arr = [
-	{ type: 'films', count: 2323 },
-	{ type: 'serials', count: 2323 },
-	{ type: 'favorite', count: 2323 },
-	{ type: 'watch later', count: 2323 },
-	{ type: 'movie', count: '-' },
-];
-</script>
 
 <style lang="scss">
 .profile {
+	.nav {
+		background-color: #e9ecef;
+	}
 	.nav-link {
 		&:hover {
-			background-color: #e9ecef;
+			background-color: #ced4da;
 			color: #2b2d42 !important;
 		}
 		&:active,

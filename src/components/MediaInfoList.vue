@@ -1,4 +1,6 @@
 <script setup>
+import fromCamelCase from '../utils/fromCamelCase';
+
 const props = defineProps({
 	mediaInfo: {
 		type: Object,
@@ -22,20 +24,6 @@ const getMergeedData = Object.keys(props.mediaInfo).reduce((acc, curr) => {
 	}
 	return acc;
 }, {});
-
-const fromCamelCase = (value) => {
-	const spaced = value.replace(/([a-z])([A-Z])/g, '$1 $2');
-	return spaced
-		.split(' ')
-		.map((el, id) =>
-			id === 0
-				? el[0].toUpperCase() + el.slice(1)
-				: el === 'USA'
-				? el
-				: el[0].toLowerCase() + el.slice(1)
-		)
-		.join(' ');
-};
 
 const formatListKeys = (key) => {
 	if (key === 'cumulativeWorldwideGross') {

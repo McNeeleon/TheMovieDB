@@ -37,7 +37,7 @@
 					/>
 				</svg>
 
-				<span>Add to Watchlist</span>
+				<span>Watch later</span>
 			</button>
 
 			<button
@@ -67,15 +67,15 @@
 			>
 				<div class="ps-3 pt-2">Add to list</div>
 				<div
-					v-for="(val, key) in actionsList"
-					:key="key"
+					v-for="item in actionsList"
+					:key="item.value"
 					class="action-movies row g-0 py-1 ps-3 border-bottom"
 					style="cursor: pointer"
-					@click="actionHandler(val)"
+					@click="actionHandler(item)"
 				>
 					<span class="col-1">
 						<svg
-							v-if="val.inList"
+							v-if="item.inList"
 							xmlns="http://www.w3.org/2000/svg"
 							width="18"
 							height="18"
@@ -92,7 +92,7 @@
 					<span
 						class="col ps-3"
 						style="color: #6f6f6f"
-						>{{ key }}
+						>{{ item.name }}
 					</span>
 				</div>
 			</div>
@@ -171,26 +171,52 @@
 <script setup>
 import { ref } from 'vue';
 
+const emit = defineEmits({
+	addToWatchList: (options) => {
+		if (Array.isArray(options)) {
+			return true;
+		} else {
+			console.warn('not array');
+			return false;
+		}
+	},
+});
+
 const isDropdownList = ref(false);
 
 const watchLater = ref(false);
 
-const actionsList = ref({
-	'Watch later': { inList: watchLater },
-	'Favorite films': { inList: false },
-	Favorites: { inList: false },
-	'Wathed ': { inList: false },
-});
+const actionsList = ref([
+	{
+		name: 'Like',
+		inList: false,
+		value: 'like',
+	},
+	{
+		name: 'Watched',
+		inList: false,
+		value: 'watched',
+	},
+	{
+		name: 'Watch later',
+		inList: watchLater,
+		value: 'watchLater',
+	},
+	{
+		name: 'Favorite films',
+		inList: false,
+		value: 'favoriteFilms',
+	},
+]);
 
-const actionHandler = (value) => {
-	value.inList = !value.inList;
-	console.log(actionsList.value);
+const actionHandler = (item) => {
+	item.inList = !item.inList;
+
+	emit('addToWatchList', [item.value, item.inList]);
 };
 
 const addToWatchLater = () => {
 	watchLater.value = !watchLater.value;
-
-	console.log(actionsList.value);
 };
 
 // const swgWidth = 26;
