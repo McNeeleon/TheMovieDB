@@ -1,6 +1,40 @@
-<template>
-	<!-- class="d-flex justify-content-around align-items-center px-3 py-2 border bg-light w-100" -->
+<script setup>
+import { computed, ref } from 'vue';
 
+const emit = defineEmits({
+	addToWatchList: (options) => {
+		if (
+			typeof options === 'object' &&
+			!Array.isArray(options) &&
+			options !== null
+		) {
+			return true;
+		} else {
+			console.warn('not Object!');
+			return false;
+		}
+	},
+	addToWatchLater: null,
+});
+
+const props = defineProps({
+	actionsList: {
+		type: Object,
+		default: () => {},
+	},
+});
+const isDropdownList = ref(false);
+
+const actionHandler = (item) => emit('addToWatchList', item);
+
+const addToWatchLater = () => emit('addToWatchLater');
+
+const isWatchLater = computed(() =>
+	props.actionsList.find((el) => el.id === 'watchLater')
+);
+</script>
+
+<template>
 	<div class="actions px-1">
 		<div class="action-btn btn-group w-100">
 			<button
@@ -9,7 +43,7 @@
 				@click="addToWatchLater"
 			>
 				<svg
-					v-if="!watchLater"
+					v-if="!isWatchLater.inList"
 					xmlns="http://www.w3.org/2000/svg"
 					width="20"
 					height="20"
@@ -67,8 +101,8 @@
 			>
 				<div class="ps-3 pt-2">Add to list</div>
 				<div
-					v-for="item in actionsList"
-					:key="item.value"
+					v-for="item in props.actionsList"
+					:key="item.id"
 					class="action-movies row g-0 py-1 ps-3 border-bottom"
 					style="cursor: pointer"
 					@click="actionHandler(item)"
@@ -89,11 +123,7 @@
 						</svg>
 					</span>
 
-					<span
-						class="col ps-3"
-						style="color: #6f6f6f"
-						>{{ item.name }}
-					</span>
+					<span class="col ps-3 dropdown-text">{{ item.name }} </span>
 				</div>
 			</div>
 		</transition-group>
@@ -168,89 +198,6 @@
 		</ul> -->
 </template>
 
-<script setup>
-import { ref } from 'vue';
-
-const emit = defineEmits({
-	addToWatchList: (options) => {
-		if (Array.isArray(options)) {
-			return true;
-		} else {
-			console.warn('not array');
-			return false;
-		}
-	},
-});
-
-const isDropdownList = ref(false);
-
-const watchLater = ref(false);
-
-const actionsList = ref([
-	{
-		name: 'Like',
-		inList: false,
-		value: 'like',
-	},
-	{
-		name: 'Watched',
-		inList: false,
-		value: 'watched',
-	},
-	{
-		name: 'Watch later',
-		inList: watchLater,
-		value: 'watchLater',
-	},
-	{
-		name: 'Favorite films',
-		inList: false,
-		value: 'favoriteFilms',
-	},
-]);
-
-const actionHandler = (item) => {
-	item.inList = !item.inList;
-
-	emit('addToWatchList', [item.value, item.inList]);
-};
-
-const addToWatchLater = () => {
-	watchLater.value = !watchLater.value;
-};
-
-// const swgWidth = 26;
-// const svgHeight = 26;
-
-// const noneColor = 'none';
-
-// const starColor = ref(noneColor);
-// const heartColor = ref(noneColor);
-// const watthLaterColor = ref(noneColor);
-
-// const isStar = ref(false);
-// const isFavorite = ref(false);
-// const isWatchLater = ref(false);
-
-// const addToFavorites = () => {
-// 	isFavorite.value = !isFavorite.value;
-
-// 	heartColor.value = isFavorite.value ? '#ff0000' : noneColor;
-// };
-
-// const addToStars = () => {
-// 	isStar.value = !isStar.value;
-
-// 	starColor.value = isStar.value ? '#f5c518' : noneColor;
-// };
-
-// const addToWatchLater = () => {
-// 	isWatchLater.value = !isWatchLater.value;
-
-// 	watthLaterColor.value = isWatchLater.value ? '#31383F' : noneColor;
-// };
-</script>
-
 <style lang="scss">
 .actions {
 	position: relative;
@@ -289,37 +236,9 @@ const addToWatchLater = () => {
 				background-color: #e9ecef;
 			}
 		}
+		.dropdown-text {
+			color: #6f6f6f;
+		}
 	}
 }
-
-// .bi-heart-fill {
-// 	stroke: red;
-// 	stroke-width: 2px;
-// 	fill: none;
-// }
-
-// svg {
-// 	 fill: white;
-// }
-
-// .circle {
-// 	margin-left: 10px;
-// 	background-color: rgb(3, 37, 65);
-// 	border: 1px solid black;
-// 	border-radius: 50%;
-// 	height: 46px;
-// 	width: 46px;
-// 	padding: 10px;
-// 	display: flex;
-// 	justify-content: center;
-// 	align-items: center;
-// }
-// .list-group-item {
-// 	background-color: transparent;
-// 	border: none;
-// 	color: #5c5c5c;
-// }
-// .list-group-item {
-// 	padding-left: 0;
-// }
 </style>

@@ -2,9 +2,11 @@
 import { onMounted, ref } from 'vue';
 import { useMoviesCounterStore } from '../stores/moviesCounter';
 
+import { userMovieApi } from '../api/userMovies-api';
+
 import SwiperSlider from '../components/SwiperSlider.vue';
 import AppImageViewer from '../components/AppImageViewer.vue';
-import AppRating from '../components/AppRating.vue';
+import AppStarRating from '../components/AppStarRating.vue';
 import MediaTopCast from '../components/MediaTopCast.vue';
 import MediaCardMovies from '../components/MediaCardMovies.vue';
 import AppPreloader from '../components/AppPreloader.vue';
@@ -13,11 +15,11 @@ const moviesCounterStore = useMoviesCounterStore();
 
 // import ImdbApi from '../api/imdb-api';
 
-// const props = defineProps({
-// 	id: {
-// 		type: String,
-// 	},
-// });
+const props = defineProps({
+	id: {
+		type: String,
+	},
+});
 
 const mediaData = {
 	id: 'tt1877830',
@@ -579,6 +581,8 @@ const mediaData = {
 const initialSlide = ref(0);
 const isMediaViewer = ref(false);
 
+const movieRating = ref(0);
+
 // const mediaData = ref([]);
 const mediaImages = ref([]);
 
@@ -587,9 +591,49 @@ const isImgLoad = ref(true);
 
 const obser = ref(null);
 
-onMounted(() => {
+const watchLater = ref(false);
+
+const actionsList = ref([
+	{
+		name: 'Like',
+		inList: false,
+		id: 'like',
+	},
+	{
+		name: 'Watched',
+		inList: false,
+		id: 'watched',
+	},
+	{
+		name: 'Watch later',
+		inList: watchLater,
+		id: 'watchLater',
+	},
+	{
+		name: 'Favorite films',
+		inList: false,
+		id: 'favoriteFilms',
+	},
+]);
+
+const loadUserMovieInfo = () => {
 	moviesCounterStore.loadCounterMovies();
 
+	const categorListMovie = userMovieApi.getUserMovieInfo(props.id);
+
+	categorListMovie
+		.then((response) => {
+			actionsList.value.map((el) => {
+				return Object.assign(el, {
+					inList: response[el.id].booleanValue,
+				});
+			});
+		})
+		.catch((e) => e);
+};
+
+onMounted(() => {
+	loadUserMovieInfo();
 	// CH API Path
 	// ImdbApi.getTitleById(props.id, ['Ratings'])
 	// 	.then((res) => {
@@ -628,7 +672,9 @@ const opneMediaViewer = (slideNumber) => {
 	console.log(slideNumber);
 };
 
-const setRating = (rat) => console.log(rat);
+const setRating = (rat) => {
+	movieRating.value = rat;
+};
 
 const closeMediaViewer = () => (isMediaViewer.value = false);
 
@@ -655,8 +701,33 @@ const breakpoints = {
 	},
 };
 
-const watchListHandler = (id) => {
-	moviesCounterStore.movieCounthandler(id, mediaData.type.toLowerCase());
+const watchListHandler = (options) => {
+	actionsList.value.find(
+		(el) => el.id === options.id && (el.inList = !el.inList)
+	);
+
+	const { title, image, year, runtimeMins, imDbRating } = mediaData;
+
+	moviesCounterStore.movieCounter([options.id, options.inList], mediaData.type);
+
+	userMovieApi.postUserMovieInfo(actionsList, props.id, {
+		title,
+		image,
+		year,
+		runtimeMins,
+		imDbRating,
+		vote: movieRating.value,
+	});
+};
+
+const watchLaterHandler = () => {
+	watchLater.value = !watchLater.value;
+	moviesCounterStore.movieCounter(
+		['watchLater', watchLater.value],
+		mediaData.type
+	);
+
+	userMovieApi.postUserMovieInfo(actionsList, props.id);
 };
 </script>
 
@@ -664,11 +735,13 @@ const watchListHandler = (id) => {
 	<div class="container-xl bg-white">
 		<div
 			v-if="isLoading"
-			class="media p-3 md-4"
+			class="media p-2 md-4"
 		>
 			<MediaCardMovies
 				:media-data="mediaData"
+				:actions-list="actionsList"
 				@add-to-watch-list="watchListHandler"
+				@add-to-watch-later="watchLaterHandler"
 			/>
 
 			<div class="media-info">
@@ -679,7 +752,11 @@ const watchListHandler = (id) => {
 					</p>
 				</div>
 				<div class="star-rating mb-5">
-					<AppRating @set-rating="setRating" />
+					<AppStarRating
+						:movie-rating="mediaData.imDbRating"
+						:movie-rating-votes="mediaData.imDbRatingVotes"
+						@set-rating="setRating"
+					/>
 				</div>
 
 				<div

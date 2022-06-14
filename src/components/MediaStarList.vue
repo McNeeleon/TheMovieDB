@@ -1,12 +1,12 @@
 <template>
 	<div class="star-list d-flex justify-content-md-end">
-		<div class="star-cards flex-grow-1 flex-sm-grow-0 d-flex flex-column">
+		<div class="star-cards d-flex flex-column">
 			<h3 class="fs-5">В ролях</h3>
 			<div class="d-flex flex-sm-row flex-md-column justify-content-between">
 				<div
 					v-for="(item, index) in starList"
 					:key="index"
-					class="card border-0 mb-2 me-sm-4"
+					class="card border-0 mb-2 me-2 me-sm-4 me-md-0"
 					style="width: 6.5rem"
 				>
 					<!-- <div style="width: 200px; height: 250px"> -->

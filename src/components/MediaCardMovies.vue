@@ -3,7 +3,7 @@ import MediaCardMoviesHeader from './MediaCardMoviesHeader.vue';
 
 import MediaStarList from './MediaStarList.vue';
 import MediaInfoList from './MediaInfoList.vue';
-import MrdiaActions from './MrdiaActions.vue';
+import MediaActions from './MediaActions.vue';
 const props = defineProps({
 	mediaData: {
 		type: Object,
@@ -11,11 +11,16 @@ const props = defineProps({
 			return {};
 		},
 	},
+	actionsList: {
+		type: Object,
+		default: () => {},
+	},
 });
 
-const emit = defineEmits(['addToWatchList']);
+const emit = defineEmits(['addToWatchList', 'addToWatchLater']);
 
 const addToWatchList = (options) => emit('addToWatchList', options);
+const addToWatchLater = () => emit('addToWatchLater');
 
 const infoMap = [
 	'year',
@@ -46,29 +51,16 @@ const headerInfo = headerMap.reduce((acc, curr) => {
 	return acc;
 }, {});
 
-// const mediaInfo = infoMap.reduce((acc, curr) => {
-// 	if (typeof props.mediaData[curr] === 'object') {
-// 		for (const key in props.mediaData[curr]) {
-// 			acc[key] = props.mediaData[curr][key];
-// 		}
-// 	} else {
-// 		acc[curr] = props.mediaData[curr];
-// 	}
+const mediaInfo = infoMap.reduce((acc, curr) => {
+	acc[curr] = props.mediaData[curr];
+	return acc;
+}, {});
 
-// 	return acc;
-// }, {});
-
-// console.log(mediaInfo);
 const starListId = props.mediaData.starList.map((el) => el.id);
 
 const starList = props.mediaData.actorList.filter((el) =>
 	starListId.includes(el.id)
 );
-
-const mediaInfo = infoMap.reduce((acc, curr) => {
-	acc[curr] = props.mediaData[curr];
-	return acc;
-}, {});
 </script>
 
 <template>
@@ -87,7 +79,11 @@ const mediaInfo = infoMap.reduce((acc, curr) => {
 						class="mb-3"
 					/>
 
-					<MrdiaActions @add-to-watch-list="addToWatchList" />
+					<MediaActions
+						:actions-list="actionsList"
+						@add-to-watch-list="addToWatchList"
+						@add-to-watch-later="addToWatchLater"
+					/>
 				</div>
 			</div>
 

@@ -25,7 +25,7 @@ const getMergeedData = Object.keys(props.mediaInfo).reduce((acc, curr) => {
 	return acc;
 }, {});
 
-const formatListKeys = (key) => {
+const formaInfotKey = (key) => {
 	if (key === 'cumulativeWorldwideGross') {
 		return 'Gross worldwid';
 	} else if (key === 'runtimeStr') {
@@ -58,7 +58,7 @@ const formatBudgetVal = (key, val) => {
 					class="text-wrap col-5 text-muted"
 					style="color: rgba(0, 0, 0, 0.4)"
 				>
-					{{ formatListKeys(key) }}
+					{{ formaInfotKey(key) }}
 				</div>
 				<div
 					class="col-7"

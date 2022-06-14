@@ -66,14 +66,12 @@
 </template>
 
 <script setup>
-const props = defineProps({
+defineProps({
 	headerInfo: {
 		type: Object,
 		default: () => {},
 	},
 });
-
-console.log(props.headerInfo);
 </script>
 
 <style lang="scss">
