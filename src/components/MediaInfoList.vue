@@ -1,5 +1,6 @@
 <script setup>
 import fromCamelCase from '../utils/fromCamelCase';
+import checkForVoid from '../utils/checkForVoid.js';
 
 const props = defineProps({
 	mediaInfo: {
@@ -7,8 +8,6 @@ const props = defineProps({
 		default: () => {},
 	},
 });
-
-const checkForVoid = (val) => (val === '' ? '—' : val);
 
 const getMergeedData = Object.keys(props.mediaInfo).reduce((acc, curr) => {
 	if (typeof props.mediaInfo[curr] === 'object') {

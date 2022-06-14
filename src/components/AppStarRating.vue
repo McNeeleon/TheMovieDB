@@ -1,10 +1,11 @@
 <script setup>
 import { computed } from '@vue/reactivity';
-import { ref } from 'vue';
+// import { ref } from 'vue';
 
 import StarRating from 'vue-star-rating';
 
 import numberFormat from '../utils/numberFormat';
+import checkForVoid from '../utils/checkForVoid';
 
 const emits = defineEmits({
 	setRating: (val) => {
@@ -18,26 +19,28 @@ const emits = defineEmits({
 });
 
 const props = defineProps({
-	movieRating: String,
+	movieRating: Number,
 	movieRatingVotes: String,
+	movieVote: Number,
 });
 
-const ratingVal = ref(0);
+// const ratingVal = ref(0);
 
 const setRating = (rat) => {
-	ratingVal.value = rat;
 	emits('setRating', rat);
 };
 
-const checkForInteger = (num) => (num % 2 === 0 ? `${num}.0` : num);
+const checkForInteger = (num) =>
+	checkForVoid(num) || (num % 2 === 0 ? `${num}.0` : num);
 
 const userRatingBgColor = computed(() =>
-	ratingVal.value <= 4
+	props.movieVote <= 4
 		? 'bg-danger'
-		: ratingVal.value < 7
+		: props.movieVote < 7
 		? 'bg-secondary'
 		: 'bg-success'
 );
+console.log(userRatingBgColor);
 
 const movieRattingColor = computed(() =>
 	props.movieRating.value <= 4
@@ -56,6 +59,7 @@ const movieRattingColor = computed(() =>
 			:show-rating="false"
 			:star-size="35"
 			:padding="5"
+			:rating="movieRating"
 			:active-color="'#5e548e'"
 			@update:rating="setRating"
 		/>
@@ -71,14 +75,17 @@ const movieRattingColor = computed(() =>
 		</div>
 	</div>
 
-	<div class="d-flex align-items-center">
+	<div
+		v-if="movieVote"
+		class="d-flex align-items-center"
+	>
 		<span class="me-3">My point</span>
 		<div
 			class="rounded-circle d-flex justify-content-center align-items-center"
 			:class="userRatingBgColor"
 			style="width: 26px; height: 26px"
 		>
-			<span class="text-white">{{ ratingVal }}</span>
+			<span class="text-white">{{ movieVote }}</span>
 		</div>
 	</div>
 </template>

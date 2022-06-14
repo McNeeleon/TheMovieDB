@@ -1,16 +1,19 @@
+<script setup>
+import checkForVoid from '../utils/checkForVoid';
+
+defineProps({
+	headerInfo: {
+		type: Object,
+		default: () => {},
+	},
+});
+</script>
+
 <template>
 	<div
 		class="card-header d-flex flex-column flex-md-row flex-wrap justify-content-between align-items-center mb-2 p-0"
 	>
 		<h1 class="media-title fw-600 me-2 mb-0">{{ headerInfo.title }}</h1>
-		<!-- <div class="facts">
-				<span class="certification px-1 border">
-					{{ headerInfo.contentRating }}
-				</span>
-				<span class="release">{{ headerInfo.releaseDate }} </span>
-
-				<span class="runtime">{{ headerInfo.runtimeStr }}</span>
-			</div> -->
 
 		<div class="media-rating d-flex">
 			<div class="rating-type">
@@ -31,7 +34,9 @@
 						></path>
 					</svg>
 					<div>
-						<span class="fs-5 fw-600 me-1">{{ headerInfo.ratings.imDb }} </span>
+						<span class="fs-5 fw-600 me-1"
+							>{{ checkForVoid(headerInfo.ratings.imDb, 'sm') }}
+						</span>
 						<span class="fs-6 text-muted">/10</span>
 					</div>
 				</div>
@@ -55,7 +60,7 @@
 					</svg>
 					<div>
 						<span class="fs-5 fw-600 me-1"
-							>{{ headerInfo.ratings.rottenTomatoes }}
+							>{{ checkForVoid(headerInfo.ratings.rottenTomatoes, 'sm') }}
 						</span>
 						<span class="fs-6 text-muted">/100</span>
 					</div>
@@ -64,15 +69,6 @@
 		</div>
 	</div>
 </template>
-
-<script setup>
-defineProps({
-	headerInfo: {
-		type: Object,
-		default: () => {},
-	},
-});
-</script>
 
 <style lang="scss">
 .card-header {

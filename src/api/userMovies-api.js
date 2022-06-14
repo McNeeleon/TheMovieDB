@@ -9,7 +9,10 @@ export class userMovieApi {
 				`/v1/projects/${FIREBASE_ID}/databases/(default)/documents/MovieList/${id}`
 			);
 
-			return data.fields.list.mapValue.fields;
+			return {
+				list: data.fields.list.mapValue.fields,
+				info: data.fields.info.mapValue.fields,
+			};
 		} catch {}
 	}
 

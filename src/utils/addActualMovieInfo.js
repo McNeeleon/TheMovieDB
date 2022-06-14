@@ -11,7 +11,7 @@ export const addMovieInfo = (movieInfoList, movieInfo) => {
 		const sameItem = movieInfo[key];
 		const element = movieInfoList[key];
 		for (const sub in element) {
-			element[sub] = sameItem;
+			element[sub] = sameItem ?? '';
 		}
 	}
 };

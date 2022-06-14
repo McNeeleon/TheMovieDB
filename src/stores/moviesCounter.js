@@ -18,7 +18,6 @@ export const useMoviesCounterStore = defineStore('counter', {
 			const category = this.moviesCounter.find(
 				(el) => el.id === id || (id === 'watched' && movieType === el.id)
 			);
-
 			const count = inInList ? ++category.count : --category.count;
 
 			const path = id === 'watched' ? movieType : id;
