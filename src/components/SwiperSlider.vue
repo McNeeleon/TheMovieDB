@@ -62,25 +62,27 @@ export default {
 	},
 };
 </script>
-<style>
-.mySwiper .swiper-button-next,
-.mySwiper .swiper-button-prev {
-	background-color: rgba(0, 0, 0, 0.7);
-	/* border: 1px solid #ffff; */
-	border-radius: 7%;
-	/* padding: 25px 15px; */
+<style lang="scss">
+.mySwiper {
+	.swiper-button-next,
+	.swiper-button-prev {
+		background-color: rgba(0, 0, 0, 0.7);
+		/* border: 1px solid #ffff; */
+		border-radius: 7%;
+		/* padding: 25px 15px; */
 
-	width: calc(var(--swiper-navigation-size) / 44 * 37);
-	height: calc(var(--swiper-navigation-size) * 1.2);
-}
-.mySwiper .swiper-button-next:after,
-.mySwiper .swiper-button-prev::after {
-	color: #fff;
-	font-size: 30px;
-}
+		width: calc(var(--swiper-navigation-size) / 44 * 37);
+		height: calc(var(--swiper-navigation-size) * 1.2);
+	}
+	.swiper-button-next:after,
+	.swiper-button-prev::after {
+		color: #fff;
+		font-size: 1.5em;
+	}
 
-.mySwiper .swiper-button-next:hover::after,
-.mySwiper .swiper-button-prev:hover::after {
-	color: #ffc107 !important;
+	.swiper-button-next:hover::after,
+	.swiper-button-prev:hover::after {
+		color: #ffc107 !important;
+	}
 }
 </style>

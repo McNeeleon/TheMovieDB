@@ -1,6 +1,6 @@
 <template>
 	<div
-		v-if="size != 'fit'"
+		v-if="size === 'full'"
 		class="overlay"
 	>
 		<div class="d-flex justify-content-center">
@@ -58,7 +58,7 @@
 defineProps({
 	size: {
 		type: String,
-		default: 'fit',
+		default: 'full',
 		validation: (value) => {
 			return ['fit', 'full'].include(value);
 		},

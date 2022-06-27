@@ -4,7 +4,7 @@
 			<div
 				v-for="(item, index) in 50"
 				:key="index"
-				class="col-6 col-sm-3 col-md-3 col-lg-2 col-xl-2s"
+				class="col-6 col-sm-3 col-md-3 col-lg-2 col-xl-2"
 			>
 				<div
 					class="card border-0"

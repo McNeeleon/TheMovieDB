@@ -4,6 +4,9 @@ import MediaCardMoviesHeader from './MediaCardMoviesHeader.vue';
 import MediaStarList from './MediaStarList.vue';
 import MediaInfoList from './MediaInfoList.vue';
 import MediaActions from './MediaActions.vue';
+
+import { getObjectByArray } from '../utils/getObjectByArray';
+
 const props = defineProps({
 	mediaData: {
 		type: Object,
@@ -16,11 +19,6 @@ const props = defineProps({
 		default: () => {},
 	},
 });
-
-const emit = defineEmits(['addToWatchList', 'addToWatchLater']);
-
-const addToWatchList = (options) => emit('addToWatchList', options);
-const addToWatchLater = () => emit('addToWatchLater');
 
 const infoMap = [
 	'year',
@@ -46,15 +44,15 @@ const headerMap = [
 	'ratings',
 ];
 
-const headerInfo = headerMap.reduce((acc, curr) => {
-	acc[curr] = props.mediaData[curr];
-	return acc;
-}, {});
+const emit = defineEmits(['addToWatchList', 'addToWatchLater']);
 
-const mediaInfo = infoMap.reduce((acc, curr) => {
-	acc[curr] = props.mediaData[curr];
-	return acc;
-}, {});
+const addToWatchList = (options) => emit('addToWatchList', options);
+
+const addToWatchLater = () => emit('addToWatchLater');
+
+const headerInfo = getObjectByArray(headerMap, props.mediaData);
+
+const mediaInfo = getObjectByArray(infoMap, props.mediaData);
 
 const starListId = props.mediaData.starList.map((el) => el.id);
 
@@ -76,7 +74,9 @@ const starList = props.mediaData.actorList.filter((el) =>
 					<img
 						:src="mediaData.image"
 						style="width: 100%; height: auto"
-						class="mb-3"
+						width="250"
+						height="350"
+						class="mb-3 rounded"
 					/>
 
 					<MediaActions
@@ -97,11 +97,3 @@ const starList = props.mediaData.actorList.filter((el) =>
 		</div>
 	</div>
 </template>
-
-<style lang="scss">
-@media (max-width: 576px) {
-	.media-card {
-		// padding: 0 !important;
-	}
-}
-</style>

@@ -3,7 +3,38 @@ import { firebaseAxios, FIREBASE_ID } from '../axios/axios';
 import { addFlagList, addMovieInfo } from '../utils/addActualMovieInfo';
 
 export class userMovieApi {
-	static async getUserMovieInfo(id) {
+	static async getUserMovieList() {
+		const { data } = await firebaseAxios.get(
+			`/v1/projects/${FIREBASE_ID}/databases/(default)/documents/MovieList`
+		);
+
+		const movieData = [];
+
+		data.documents.forEach((item) => {
+			const info = {};
+
+			const id = item.name.split('/');
+			const createTime = item.createTime;
+
+			info.id = id[id.length - 1];
+			info.createTime = createTime;
+
+			for (const key in item.fields) {
+				const element = item.fields[key].mapValue.fields;
+
+				Object.entries(element).forEach(([key, val]) => {
+					for (const el in val) {
+						info[key] = el === 'integerValue' ? +val[el] : val[el];
+					}
+				});
+			}
+			movieData.push(info);
+		});
+		console.log(movieData);
+		return movieData;
+	}
+
+	static async getUserMovieInfoById(id) {
 		try {
 			const { data } = await firebaseAxios.get(
 				`/v1/projects/${FIREBASE_ID}/databases/(default)/documents/MovieList/${id}`
@@ -84,12 +115,15 @@ export class userMovieApi {
 								stringValue: '',
 							},
 							year: {
-								stringValue: '',
+								integerValue: 0,
 							},
 							imDbRating: {
-								stringValue: '',
+								doubleValue: 0,
 							},
 							runtimeMins: {
+								integerValue: 0,
+							},
+							countries: {
 								stringValue: '',
 							},
 							vote: {
@@ -103,6 +137,9 @@ export class userMovieApi {
 
 		addFlagList(movieInfoList.fields.list.mapValue.fields, actionsList);
 		addMovieInfo(movieInfoList.fields.info.mapValue.fields, movieInfo);
+
+		console.log(movieInfoList);
+		console.log(movieInfo);
 
 		try {
 			firebaseAxios.patch(

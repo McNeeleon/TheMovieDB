@@ -1,0 +1,16 @@
+export const formatDate = (d, opt, isTime) => {
+	const date = new Date(d);
+
+	if (opt === false) {
+		opt = {};
+	} else if (opt === true) {
+		opt = { year: 'numeric', month: 'numeric', day: 'numeric' };
+	}
+
+	const time = isTime && { hour: 'numeric', minute: 'numeric' };
+
+	return new Intl.DateTimeFormat('ru-RU', {
+		...time,
+		...opt,
+	}).format(date);
+};

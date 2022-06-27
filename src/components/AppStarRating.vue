@@ -1,11 +1,11 @@
 <script setup>
 import { computed } from '@vue/reactivity';
-// import { ref } from 'vue';
 
 import StarRating from 'vue-star-rating';
 
-import numberFormat from '../utils/numberFormat';
-import checkForVoid from '../utils/checkForVoid';
+import { formatNumber } from '../utils/number';
+
+import usedFormatNumber from '../use/usedFormatNumber';
 
 const emits = defineEmits({
 	setRating: (val) => {
@@ -19,19 +19,21 @@ const emits = defineEmits({
 });
 
 const props = defineProps({
-	movieRating: Number,
-	movieRatingVotes: String,
-	movieVote: Number,
+	movieRating: {
+		type: Number,
+		default: 0,
+	},
+	movieRatingVotes: {
+		type: Number,
+		default: 0,
+	},
+	movieVote: {
+		type: Number,
+		default: 0,
+	},
 });
 
-// const ratingVal = ref(0);
-
-const setRating = (rat) => {
-	emits('setRating', rat);
-};
-
-const checkForInteger = (num) =>
-	checkForVoid(num) || (num % 2 === 0 ? `${num}.0` : num);
+const setRating = (rat) => emits('setRating', rat);
 
 const userRatingBgColor = computed(() =>
 	props.movieVote <= 4
@@ -40,7 +42,6 @@ const userRatingBgColor = computed(() =>
 		? 'bg-secondary'
 		: 'bg-success'
 );
-console.log(userRatingBgColor);
 
 const movieRattingColor = computed(() =>
 	props.movieRating.value <= 4
@@ -49,6 +50,8 @@ const movieRattingColor = computed(() =>
 		? 'text-secondary'
 		: 'text-success'
 );
+
+const { formatInteger } = usedFormatNumber();
 </script>
 <template>
 	<h4 class="fw-600">Рейтинг фильма</h4>
@@ -69,9 +72,9 @@ const movieRattingColor = computed(() =>
 				class="fw-bold lh-1"
 				:class="movieRattingColor"
 				style="font-size: 3.2em"
-				>{{ checkForInteger(movieRating) }}</span
+				>{{ formatInteger(movieRating) }}</span
 			>
-			<span class="lh-1 votes">{{ numberFormat(movieRatingVotes) }} votes</span>
+			<span class="lh-1 votes">{{ formatNumber(movieRatingVotes) }} votes</span>
 		</div>
 	</div>
 

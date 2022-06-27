@@ -80,10 +80,7 @@ const moviesCounter = computed(() => moviesCounterStore.getMoviesCounter);
 			</li>
 		</ul>
 	</div>
-	<AppPreloader
-		v-else
-		size="full"
-	/>
+	<AppPreloader v-else />
 </template>
 
 <style lang="scss">

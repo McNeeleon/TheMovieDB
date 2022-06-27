@@ -3,15 +3,17 @@ import { onMounted, ref } from 'vue';
 import { useMoviesCounterStore } from '../stores/moviesCounter';
 
 import { userMovieApi } from '../api/userMovies-api';
+import ImdbApi from '../api/movies-api';
 
-import SwiperSlider from '../components/SwiperSlider.vue';
-import AppImageViewer from '../components/AppImageViewer.vue';
 import AppStarRating from '../components/AppStarRating.vue';
 import MediaTopCast from '../components/MediaTopCast.vue';
 import MediaCardMovies from '../components/MediaCardMovies.vue';
+import MediaImages from '../components/MediaImages.vue';
+
+import useedMediaAction from '../use/useedMediaAction';
 import AppPreloader from '../components/AppPreloader.vue';
 
-import ImdbApi from '../api/movies-api';
+import observer from '../utils/observer';
 
 const moviesCounterStore = useMoviesCounterStore();
 
@@ -573,13 +575,7 @@ const props = defineProps({
 // 			imDbRating: '8.4',
 // 		},
 // 	],
-// 	tvSeriesInfo: null,
-// 	tvEpisodeInfo: null,
-// 	errorMessage: null,
 // };
-
-const initialSlide = ref(0);
-const isMediaViewer = ref(false);
 
 const movieVote = ref(0);
 
@@ -587,9 +583,9 @@ const mediaData = ref([]);
 const mediaImages = ref([]);
 
 const isLoading = ref(true);
-const isImgLoad = ref(true);
+const isImgLoading = ref(true);
 
-const obser = ref(null);
+const imgObserver = ref(null);
 
 const watchLater = ref(false);
 
@@ -616,144 +612,54 @@ const actionsList = ref([
 	},
 ]);
 
-const loadUserMovieInfo = () => {
-	moviesCounterStore.loadCounterMovies();
-
-	const categorListMovie = userMovieApi.getUserMovieInfo(props.id);
-
-	categorListMovie
-		.then((response) => {
-			console.log(response);
-			actionsList.value.map((el) => {
-				return Object.assign(el, {
-					inList: response.list[el.id].booleanValue,
-				});
-			});
-			movieVote.value = +response.info.vote.integerValue;
-		})
-		.catch((e) => e);
-};
-
-onMounted(() => {
-	// CH API Path
+const loadMovieById = () => {
 	ImdbApi.getTitleById(props.id, ['Ratings'])
 		.then((res) => {
-			// fetch('https://jsonplaceholder.typicode.com/todos/1')
-			// .then((response) => response.json())
-			// .then((r) => {
 			isLoading.value = true;
 			mediaData.value = res;
 			isLoading.value = false;
 		})
 		.then((_) => {
-			observer.observe(obser.value);
+			observImg.observe(imgObserver.value);
 		});
-	loadUserMovieInfo();
-});
-
-const callback = function (entries) {
-	if (entries[0].isIntersecting) {
-		isImgLoad.value = true;
-		ImdbApi.getTitleImages(props.id).then((res) => {
-			mediaImages.value = res.items;
-			isImgLoad.value = false;
-			console.log('load');
-			observer.unobserve(obser.value);
-		});
-	}
-};
-const options = {
-	rootMargin: '0px',
-	threshold: 0.1,
 };
 
-const observer = new IntersectionObserver(callback, options);
+const loadUserMovieInfo = () => {
+	moviesCounterStore.loadCounterMovies();
 
-const opneMediaViewer = (slideNumber) => {
-	initialSlide.value = slideNumber;
-	isMediaViewer.value = true;
-	console.log(slideNumber);
+	userMovieApi
+		.getUserMovieInfoById(props.id)
+		.then((response) => {
+			actionsList.value.map((el) =>
+				Object.assign(el, {
+					inList: response.list[el.id].booleanValue,
+				})
+			);
+			movieVote.value = +response.info.vote.integerValue;
+		})
+		.catch((e) => e);
 };
 
-const setRating = (rat) => {
-	movieVote.value = rat;
-
-	const { title, image, year, runtimeMins, imDbRating } = mediaData;
-
-	const item = actionsList.value.find((el) => el.id === 'watched');
-	item.inList = true;
-
-	moviesCounterStore.movieCounter(
-		['watched', item.inList],
-		mediaData.value.type
-	);
-
-	userMovieApi.postUserMovieInfo(actionsList, props.id, {
-		title,
-		image,
-		year,
-		runtimeMins,
-		imDbRating,
-		vote: movieVote.value,
+const observCallback = () => {
+	isImgLoading.value = true;
+	ImdbApi.getTitleImages(props.id).then((res) => {
+		mediaImages.value = res.items;
+		isImgLoading.value = false;
+		observImg.unobserve(imgObserver.value);
 	});
 };
 
-const closeMediaViewer = () => (isMediaViewer.value = false);
+onMounted([loadMovieById, loadUserMovieInfo]);
 
-const breakpoints = {
-	576: {
-		slidesPerView: 3,
-		spaceBetween: 10,
-	},
-	640: {
-		slidesPerView: 3,
-		spaceBetween: 10,
-	},
-	768: {
-		slidesPerView: 4,
-		spaceBetween: 15,
-	},
-	1024: {
-		slidesPerView: 5,
-		spaceBetween: 20,
-	},
-	1400: {
-		slidesPerView: 6,
-		spaceBetween: 20,
-	},
-};
+const observImg = observer(observCallback);
 
-const watchListHandler = (options) => {
-	actionsList.value.find(
-		(el) => el.id === options.id && (el.inList = !el.inList)
-	);
-
-	const { title, image, year, runtimeMins, imDbRating } = mediaData.value;
-
-	moviesCounterStore.movieCounter(
-		[options.id, options.inList],
-		mediaData.value.type
-	);
-
-	userMovieApi.postUserMovieInfo(actionsList, props.id, {
-		title,
-		image,
-		year,
-		runtimeMins,
-		imDbRating,
-		vote: movieVote.value,
-	});
-};
-
-const watchLaterHandler = () => {
-	watchLater.value = !watchLater.value;
-	moviesCounterStore.movieCounter(
-		['watchLater', watchLater.value],
-		mediaData.value.type
-	);
-
-	userMovieApi.postUserMovieInfo(actionsList, props.id);
-};
+const { setRating, watchLaterHandler, watchListHandler } = useedMediaAction(
+	mediaData,
+	movieVote,
+	actionsList,
+	watchLater,
+	props.id
+);
 </script>
 
 <template>
@@ -779,53 +685,20 @@ const watchLaterHandler = () => {
 				<div class="star-rating mb-5">
 					<AppStarRating
 						:movie-rating="+mediaData.imDbRating"
-						:movie-rating-votes="mediaData.imDbRatingVotes"
+						:movie-rating-votes="+mediaData.imDbRatingVotes"
 						:movie-vote="movieVote"
 						@set-rating="setRating"
 					/>
 				</div>
 
 				<div
-					ref="obser"
+					ref="imgObserver"
 					class="media-images mb-4"
 				>
-					<template v-if="!isImgLoad">
-						<h3
-							class="border-start border-5 border-warning ps-2 p-0 mb-3"
-							style="cursor: pointer"
-							@click="opneMediaViewer(0)"
-						>
-							Photos {{ mediaImages.length + 1 }}
-						</h3>
-
-						<SwiperSlider
-							:data="mediaImages.slice(0, 9)"
-							:slides-view="2"
-							:breakpoints="breakpoints"
-							#="{ item, id }"
-						>
-							<div
-								class="mb-4"
-								style="max-width: 210px; height: 210px; cursor: pointer"
-							>
-								<img
-									style="width: 100%; height: 100%; object-fit: cover"
-									:src="item.image"
-									:alt="item.title"
-									@click="opneMediaViewer(id)"
-								/>
-							</div>
-						</SwiperSlider>
-
-						<AppImageViewer
-							v-if="isMediaViewer"
-							:initial-slide="initialSlide"
-							:images-list="mediaImages"
-							@close-media-viewer="closeMediaViewer"
-						></AppImageViewer>
-					</template>
-
-					<AppPreloader v-else />
+					<MediaImages
+						:media-images="mediaImages"
+						:is-img-load="isImgLoading"
+					/>
 				</div>
 
 				<div class="top-cast">
@@ -833,35 +706,7 @@ const watchLaterHandler = () => {
 				</div>
 			</div>
 		</div>
-		<div v-else>EMPTY</div>
+
+		<AppPreloader v-else />
 	</div>
 </template>
-
-<style lang="scss">
-.card {
-	color: black;
-}
-.media {
-	/* background-image: url('https://m.media-amazon.com/images/M/MV5BNWM0ZGJlMzMtZmYwMi00NzI3LTgzMzMtNjMzNjliNDRmZmFlXkEyXkFqcGdeQXVyMTM1MTE1NDMx._V1_Ratio0.6699_AL_.jpg'); */
-	/* background-repeat: no-repeat;
-  background-size: cover;
-  background-position: center; */
-	min-height: 510px;
-	width: 100%;
-	position: relative;
-}
-
-.media::before {
-	/* content: '';
-  display: block;
-  background-color: rgba(22, 23, 30, 0.8);
-
-  position: absolute;
-  height: 100%;
-  width: 100%; */
-}
-
-img {
-	border-radius: 8px;
-}
-</style>
