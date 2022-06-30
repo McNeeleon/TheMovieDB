@@ -1,9 +1,9 @@
 import { createRouter, createWebHistory } from 'vue-router';
-import HomeView from '../views/HomeView.vue';
+import MainView from '../views/MainView.vue';
 import MediaView from '../views/MediaView.vue';
 
 const routes = [
-	{ path: '/', name: 'HomeView', component: HomeView },
+	{ path: '/main', name: 'main', component: MainView, alias: '/' },
 	{
 		path: '/popular',
 		name: 'popular',

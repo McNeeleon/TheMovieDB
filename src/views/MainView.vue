@@ -14,7 +14,7 @@
 				</div>
 			</section>
 
-			<section class="section_popular mb-5">
+			<section class="section_popular mb-5 px-2">
 				<!-- <router-link
         to="/popular"
         class="border-start border-5 border-warning fs-3 fw-600 ps-2 nav-link p-0 mb-2"
@@ -30,6 +30,7 @@
 					:data="popularMovies"
 					:breakpoints="breakpointsPopular"
 					scrollbar
+					:slides-view="2"
 					#="{ item }"
 				>
 					<AppCardMovies
@@ -40,7 +41,7 @@
 				</SwiperSlider>
 			</section>
 
-			<section class="section_born">
+			<!-- <section class="section_born">
 				<AppTitle>Born today</AppTitle>
 				<SwiperSlider
 					:data="bornTodayList"
@@ -65,7 +66,7 @@
 						</div>
 					</div>
 				</SwiperSlider>
-			</section>
+			</section> -->
 			<!--
 		<section class="section_trending mb-5">
 			<h3 class="border-start border-5 border-warning fw-600 ps-2">Rending</h3> -->
@@ -88,107 +89,108 @@
 import { onMounted, ref } from 'vue';
 import { useRouter } from 'vue-router';
 
-// import movies from '../utils/movies';
+import movies from '../utils/movies';
 
 import SwiperSlider from '../components/SwiperSlider.vue';
 import AppCardMovies from '../components/AppCardMovies.vue';
 import AppTitleLink from '../components/AppTitleLink.vue';
-import AppTitle from '../components/AppTitle.vue';
+// import AppTitle from '../components/AppTitle.vue';
 
-import moviesApi from '../api/movies-api';
+// import moviesApi from '../api/movies-api';
 
 const router = useRouter();
 
 const popularMovies = ref({});
 
 onMounted(() => {
-	moviesApi.getMostPopularMovies().then((response) => {
-		popularMovies.value = response.items;
-	});
+	// moviesApi.getMostPopularMovies().then((response) => {
+	// 	popularMovies.value = response.items;
+	// });
+	popularMovies.value = movies;
 });
 
-const bornTodayList = [
-	{
-		id: 560393,
-		name: 'Марта Тебар',
-		enName: 'Marta Tébar',
-		photo: 'https://st.kp.yandex.net/images/actor_iphone/iphone360_560393.jpg',
-		age: 46,
-		sex: 'Женский',
-	},
-	{
-		id: 1913106,
-		name: 'Аарон Ливин',
-		enName: 'Aaron Levene',
-		photo: 'https://st.kp.yandex.net/images/actor_iphone/iphone360_1913106.jpg',
-		age: 46,
-		sex: 'Мужской',
-	},
-	{
-		id: 37859,
-		name: 'Леонардо ДиКаприо',
-		enName: 'Leonardo DiCaprio',
-		photo: 'https://st.kp.yandex.net/images/actor_iphone/iphone360_37859.jpg',
-		age: 46,
-		sex: 'Мужской',
-	},
-	{
-		id: 4059746,
-		name: null,
-		enName: 'Shannon Simone Miller',
-		photo: 'https://st.kp.yandex.net/images/actor_iphone/iphone360_4059746.jpg',
-		age: 46,
-		sex: 'Женский',
-	},
-	{
-		id: 231403,
-		name: 'Юрий Лагута',
-		enName: null,
-		photo: 'https://st.kp.yandex.net/images/actor_iphone/iphone360_231403.jpg',
-		age: 46,
-		sex: 'Мужской',
-	},
-	{
-		id: 1454842,
-		name: 'Джон Б.',
-		enName: 'Jon B.',
-		photo: 'https://st.kp.yandex.net/images/actor_iphone/iphone360_1454842.jpg',
-		age: 46,
-		sex: 'Мужской',
-	},
-	{
-		id: 67481,
-		name: 'Сун Хи Ньюболд',
-		enName: 'Soon Hee Newbold',
-		photo: 'https://st.kp.yandex.net/images/actor_iphone/iphone360_67481.jpg',
-		age: 46,
-		sex: 'Женский',
-	},
-	{
-		id: 1478493,
-		name: 'Маттиас Кноп',
-		enName: 'Matthias Knop',
-		photo: 'https://st.kp.yandex.net/images/actor_iphone/iphone360_1478493.jpg',
-		age: 46,
-		sex: 'Мужской',
-	},
-	{
-		id: 245734,
-		name: 'Олеся Железняк',
-		enName: null,
-		photo: 'https://st.kp.yandex.net/images/actor_iphone/iphone360_245734.jpg',
-		age: 46,
-		sex: 'Женский',
-	},
-	{
-		id: 474667,
-		name: 'Дэвид Талли',
-		enName: 'David Tully',
-		photo: 'https://st.kp.yandex.net/images/actor_iphone/iphone360_474667.jpg',
-		age: 46,
-		sex: 'Мужской',
-	},
-];
+// const bornTodayList = [
+// 	{
+// 		id: 560393,
+// 		name: 'Марта Тебар',
+// 		enName: 'Marta Tébar',
+// 		photo: 'https://st.kp.yandex.net/images/actor_iphone/iphone360_560393.jpg',
+// 		age: 46,
+// 		sex: 'Женский',
+// 	},
+// 	{
+// 		id: 1913106,
+// 		name: 'Аарон Ливин',
+// 		enName: 'Aaron Levene',
+// 		photo: 'https://st.kp.yandex.net/images/actor_iphone/iphone360_1913106.jpg',
+// 		age: 46,
+// 		sex: 'Мужской',
+// 	},
+// 	{
+// 		id: 37859,
+// 		name: 'Леонардо ДиКаприо',
+// 		enName: 'Leonardo DiCaprio',
+// 		photo: 'https://st.kp.yandex.net/images/actor_iphone/iphone360_37859.jpg',
+// 		age: 46,
+// 		sex: 'Мужской',
+// 	},
+// 	{
+// 		id: 4059746,
+// 		name: null,
+// 		enName: 'Shannon Simone Miller',
+// 		photo: 'https://st.kp.yandex.net/images/actor_iphone/iphone360_4059746.jpg',
+// 		age: 46,
+// 		sex: 'Женский',
+// 	},
+// 	{
+// 		id: 231403,
+// 		name: 'Юрий Лагута',
+// 		enName: null,
+// 		photo: 'https://st.kp.yandex.net/images/actor_iphone/iphone360_231403.jpg',
+// 		age: 46,
+// 		sex: 'Мужской',
+// 	},
+// 	{
+// 		id: 1454842,
+// 		name: 'Джон Б.',
+// 		enName: 'Jon B.',
+// 		photo: 'https://st.kp.yandex.net/images/actor_iphone/iphone360_1454842.jpg',
+// 		age: 46,
+// 		sex: 'Мужской',
+// 	},
+// 	{
+// 		id: 67481,
+// 		name: 'Сун Хи Ньюболд',
+// 		enName: 'Soon Hee Newbold',
+// 		photo: 'https://st.kp.yandex.net/images/actor_iphone/iphone360_67481.jpg',
+// 		age: 46,
+// 		sex: 'Женский',
+// 	},
+// 	{
+// 		id: 1478493,
+// 		name: 'Маттиас Кноп',
+// 		enName: 'Matthias Knop',
+// 		photo: 'https://st.kp.yandex.net/images/actor_iphone/iphone360_1478493.jpg',
+// 		age: 46,
+// 		sex: 'Мужской',
+// 	},
+// 	{
+// 		id: 245734,
+// 		name: 'Олеся Железняк',
+// 		enName: null,
+// 		photo: 'https://st.kp.yandex.net/images/actor_iphone/iphone360_245734.jpg',
+// 		age: 46,
+// 		sex: 'Женский',
+// 	},
+// 	{
+// 		id: 474667,
+// 		name: 'Дэвид Талли',
+// 		enName: 'David Tully',
+// 		photo: 'https://st.kp.yandex.net/images/actor_iphone/iphone360_474667.jpg',
+// 		age: 46,
+// 		sex: 'Мужской',
+// 	},
+// ];
 
 // fetch(
 // 	'https://api.kinopoisk.dev/person?search=05.23.1975-05.23.2005&field=birthday&limit=50&token=48DRKES-Z81MCVN-K28FPB7-6MVGCRN'
@@ -202,50 +204,55 @@ const bornTodayList = [
 const getMovieId = (id) => router.push({ name: 'media', params: { id } });
 
 const breakpointsPopular = {
+	450: {
+		slidesPerView: 3,
+		spaceBetween: 10,
+	},
+
 	576: {
 		slidesPerView: 3,
-		spaceBetween: 20,
+		spaceBetween: 10,
 	},
-	640: {
+	600: {
 		slidesPerView: 4,
 		spaceBetween: 10,
 	},
-	768: {
-		slidesPerView: 5,
-		spaceBetween: 20,
-	},
-	1024: {
-		slidesPerView: 7,
-		spaceBetween: 20,
-	},
-	1400: {
-		slidesPerView: 7,
-		spaceBetween: 20,
-	},
-};
-
-const breakpointsBornToday = {
-	576: {
+	800: {
 		slidesPerView: 5,
 		spaceBetween: 10,
 	},
-	640: {
+	1024: {
 		slidesPerView: 6,
 		spaceBetween: 10,
 	},
-	768: {
+	1400: {
 		slidesPerView: 7,
 		spaceBetween: 10,
 	},
-	1024: {
-		slidesPerView: 8,
-		spaceBetween: 10,
-	},
-	1400: {
-		slidesPerView: 9,
-		spaceBetween: 10,
-	},
 };
+
+// const breakpointsBornToday = {
+// 	576: {
+// 		slidesPerView: 5,
+// 		spaceBetween: 10,
+// 	},
+// 	640: {
+// 		slidesPerView: 6,
+// 		spaceBetween: 10,
+// 	},
+// 	768: {
+// 		slidesPerView: 7,
+// 		spaceBetween: 10,
+// 	},
+// 	1024: {
+// 		slidesPerView: 8,
+// 		spaceBetween: 10,
+// 	},
+// 	1400: {
+// 		slidesPerView: 9,
+// 		spaceBetween: 10,
+// 	},
+// };
 </script>
 
 <style>

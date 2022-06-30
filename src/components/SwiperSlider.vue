@@ -6,11 +6,13 @@
 		navigation
 		:scrollbar="scrollbar && { draggable: true }"
 		:breakpoints="breakpoints"
+		:lazy="lazy"
 		class="mySwiper"
 	>
 		<swiper-slide
 			v-for="(item, index) in data"
 			:key="index"
+			:virtual-index="index"
 		>
 			<slot
 				:id="index"
@@ -22,7 +24,7 @@
 
 <script>
 // import CardMovie from '../components/CardMovie.vue';
-import { Navigation, Scrollbar } from 'swiper';
+import { Navigation, Scrollbar, Virtual } from 'swiper';
 import { Swiper, SwiperSlide } from 'swiper/vue';
 import 'swiper/css';
 import 'swiper/css/navigation';
@@ -55,10 +57,14 @@ export default {
 			type: Boolean,
 			default: false,
 		},
+		lazy: {
+			type: Boolean,
+			default: false,
+		},
 	},
 
 	setup() {
-		return { modules: [Navigation, Scrollbar] };
+		return { modules: [Navigation, Scrollbar, Virtual] };
 	},
 };
 </script>

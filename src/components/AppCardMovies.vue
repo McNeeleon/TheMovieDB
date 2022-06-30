@@ -11,6 +11,7 @@
 			<img
 				:src="item.image"
 				loading="lazy"
+				style="object-fit: cover; width: 100%; height: 100%"
 				:alt="item.title"
 			/>
 		</a>
@@ -24,7 +25,7 @@
 					>{{ item?.title }}</a
 				>
 			</h5>
-			<p class="card-text fw-normal">{{ item?.year }}</p>
+			<p class="card-text fw-normal">{{ item.year }}</p>
 			<!-- <p class="card-text fw-normal">{{  }}</p> -->
 		</div>
 	</div>
@@ -57,7 +58,7 @@ defineProps({
 	background-color: transparent !important;
 }
 .sm_card {
-	min-width: 100px;
+	max-width: 150px;
 }
 .md_card {
 	min-width: 100px;
@@ -71,8 +72,8 @@ defineProps({
 	overflow: hidden;
 	display: block;
 	box-shadow: 0px 0px 7px 2px rgba(0, 0, 0, 0.3);
-	/* min-width: 120px; */
-	/* min-height: 200px; */
+	width: inherit;
+	height: 200px;
 }
 
 img {
