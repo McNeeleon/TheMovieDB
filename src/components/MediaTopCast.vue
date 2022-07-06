@@ -1,3 +1,24 @@
+<script setup>
+import { onMounted, ref } from 'vue';
+
+import usedImgLazyLoad from '../use/usedImgLazyLoad';
+
+defineProps({
+	actorList: {
+		type: Array,
+		default() {
+			return [];
+		},
+	},
+});
+
+const lazy = ref(null);
+
+onMounted(() => {
+	usedImgLazyLoad(lazy);
+});
+</script>
+
 <template>
 	<h3 class="border-start border-5 border-warning ps-2 p-0 mb-3">Top cast</h3>
 	<div class="row">
@@ -12,7 +33,7 @@
 						ref="lazy"
 						:data-src="item.image"
 						class="rounded-circle lazy-img"
-						style="width: 95px; height: 95px"
+						style="width: 95px; height: 95px; object-fit: cover"
 					/>
 				</div>
 
@@ -26,43 +47,6 @@
 		</div>
 	</div>
 </template>
-
-<script setup>
-import { onMounted, ref } from 'vue';
-
-defineProps({
-	actorList: {
-		type: Array,
-		default() {
-			return [];
-		},
-	},
-});
-
-const lazy = ref(null);
-
-onMounted(() => {
-	const callback = (entries) => {
-		entries.forEach((entry) => {
-			if (entry.isIntersecting) {
-				entry.target.classList.remove('lazy-img');
-				entry.target.src = entry.target.dataset.src;
-				entry.target.removeAttribute('data-src');
-				observer.unobserve(entry.target);
-			}
-		});
-	};
-
-	const options = {
-		rootMargin: '0px',
-		threshold: 0.25,
-	};
-	const observer = new IntersectionObserver(callback, options);
-	lazy.value.forEach((el) => {
-		observer.observe(el);
-	});
-});
-</script>
 
 <style lang="scss">
 .lazy-img {

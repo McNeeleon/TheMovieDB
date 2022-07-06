@@ -4,7 +4,7 @@
 			<div class="d-inline-flex align-items-center w-100">
 				<div
 					class="menu"
-					:class="{ isShow: isShow }"
+					:class="{ show: isShow }"
 					@mouseenter="isShow = true"
 					@mouseleave="isShow = false"
 				>

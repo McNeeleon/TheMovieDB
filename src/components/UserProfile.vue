@@ -24,20 +24,19 @@ const moviesCounter = computed(() => moviesCounterStore.getMoviesCounter);
 		class="profile"
 	>
 		<div
-			class="card mb-3 border-0 mb-2 ps-4"
+			class="card mb-3 border-0 mb-2 px-2"
 			style=""
 		>
-			<div class="row g-0">
-				<div class="col-md-3">
+			<div class="row gx-3">
+				<div class="col-12 col-sm-3 col-md-3 col-lg-2">
 					<img
 						src="https://imdb-api.com/images/original/MV5BMTk1MjM3NTU5M15BMl5BanBnXkFtZTcwMTMyMjAyMg@@._V1_Ratio1.0000_AL_.jpg"
-						class="img-fluid rounded-start"
-						style="max-width: 200px"
-						alt="..."
+						class="img-fluid rounded"
+						style="max-width: 200px; width: 100%; height: 100%"
 					/>
 				</div>
-				<div class="col-md-9">
-					<div class="card-body pt-0">
+				<div class="col-12 col-sm-9 col-md-9 col-lg-10">
+					<div class="card-body p-0 pt-2 pt-sm-0">
 						<h5
 							class="fs-4 fst-italic fw-bold color-555"
 							style="font-family: Georgia, serif"

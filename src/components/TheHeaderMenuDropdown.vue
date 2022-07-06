@@ -1,7 +1,7 @@
 <template>
 	<ul class="menu-dromdown rounded-3 rounded-top-0">
 		<li class="nav">
-			<a href="#">
+			<routerLink :to="{ name: 'category', query: { cat: 'movie' } }">
 				<svg
 					xmlns="http://www.w3.org/2000/svg"
 					width="18"
@@ -15,11 +15,11 @@
 						d="M0 5a2 2 0 0 1 2-2h7.5a2 2 0 0 1 1.983 1.738l3.11-1.382A1 1 0 0 1 16 4.269v7.462a1 1 0 0 1-1.406.913l-3.111-1.382A2 2 0 0 1 9.5 13H2a2 2 0 0 1-2-2V5zm11.5 5.175 3.5 1.556V4.269l-3.5 1.556v4.35zM2 4a1 1 0 0 0-1 1v6a1 1 0 0 0 1 1h7.5a1 1 0 0 0 1-1V5a1 1 0 0 0-1-1H2z"
 					/>
 				</svg>
-				<span>Movie </span></a
+				<span>Movie </span></routerLink
 			>
 		</li>
 		<li class="nav">
-			<a href="#">
+			<routerLink :to="{ name: 'category', query: { cat: 'serial' } }">
 				<svg
 					xmlns="http://www.w3.org/2000/svg"
 					width="16"
@@ -32,11 +32,13 @@
 						d="M0 1a1 1 0 0 1 1-1h14a1 1 0 0 1 1 1v14a1 1 0 0 1-1 1H1a1 1 0 0 1-1-1V1zm4 0v6h8V1H4zm8 8H4v6h8V9zM1 1v2h2V1H1zm2 3H1v2h2V4zM1 7v2h2V7H1zm2 3H1v2h2v-2zm-2 3v2h2v-2H1zM15 1h-2v2h2V1zm-2 3v2h2V4h-2zm2 3h-2v2h2V7zm-2 3v2h2v-2h-2zm2 3h-2v2h2v-2z"
 					/>
 				</svg>
-				<span>Serial</span></a
+				<span>Serial</span></routerLink
 			>
 		</li>
 		<li class="nav">
-			<a href="#"
+			<routerLink
+				:to="{ name: 'category', query: { cat: 'top' } }"
+				href="#"
 				><svg
 					xmlns="http://www.w3.org/2000/svg"
 					width="16"
@@ -50,10 +52,10 @@
 					/>
 				</svg>
 				<span>Top</span>
-			</a>
+			</routerLink>
 		</li>
 		<li class="nav">
-			<a href="#">
+			<routerLink :to="{ name: 'category', query: { cat: 'soon' } }">
 				<svg
 					xmlns="http://www.w3.org/2000/svg"
 					width="16"
@@ -70,7 +72,7 @@
 					/>
 				</svg>
 				<span>Soon</span>
-			</a>
+			</routerLink>
 		</li>
 	</ul>
 </template>
@@ -78,7 +80,7 @@
 <style lang="scss">
 $menu-color: #2a2a2b;
 
-.isShow .menu-dromdown {
+.show .menu-dromdown {
 	visibility: visible;
 	opacity: 1;
 }

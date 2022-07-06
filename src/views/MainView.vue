@@ -33,11 +33,35 @@
 					:slides-view="2"
 					#="{ item }"
 				>
-					<AppCardMovies
-						:item="item"
-						card-size="sm_card"
+					<div
+						class="card border-0 pb-3"
 						@click="getMovieId(item.id)"
-					/>
+					>
+						<a
+							href="#"
+							class="d-block"
+							@click.prevent="action"
+						>
+							<img
+								:src="item.image"
+								class="img-fluid rounded-3 shadow"
+								:alt="item.title"
+							/>
+						</a>
+
+						<div class="card-body text-start p-0 pt-2">
+							<h5 class="card-title p-0 m-0">
+								<a
+									href="#"
+									class="nav-link link-dark fw-600 p-0"
+									@click.prevent="action"
+									>{{ item?.title }}</a
+								>
+							</h5>
+							<p class="card-text fw-normal">{{ item.year }}</p>
+							<!-- <p class="card-text fw-normal">{{  }}</p> -->
+						</div>
+					</div>
 				</SwiperSlider>
 			</section>
 
@@ -89,10 +113,10 @@
 import { onMounted, ref } from 'vue';
 import { useRouter } from 'vue-router';
 
-import movies from '../utils/movies';
+import { movies } from '../utils/movies';
 
 import SwiperSlider from '../components/SwiperSlider.vue';
-import AppCardMovies from '../components/AppCardMovies.vue';
+// import AppCardMovies from '../components/AppCardMovies.vue';
 import AppTitleLink from '../components/AppTitleLink.vue';
 // import AppTitle from '../components/AppTitle.vue';
 

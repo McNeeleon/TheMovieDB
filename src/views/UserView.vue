@@ -4,31 +4,23 @@ import { ref } from 'vue';
 import Category from '../components/UserCategoryList.vue';
 import Profile from '../components/UserProfile.vue';
 import Votes from '../components/UserVotes.vue';
+import AppTabs from '../components/AppTabs.vue';
 
 const tabs = { Profile, Votes, Category };
 
 const activeLink = ref('Profile');
+
+const activTab = (idx) => (activeLink.value = idx);
 </script>
 
 <template>
-	<div class="container-sm">
+	<div class="container-sm px-sm-2 px-md-5">
 		<div class="user-page bg-white">
-			<ul class="user-nav nav nav-tabs mb-3 border-bottom-0">
-				<li
-					v-for="(_, tab) in tabs"
-					:key="tab"
-					href="#"
-					class="nav-item"
-					@click="activeLink = tab"
-				>
-					<a
-						class="nav-link px-3 text-muted fw-600 font-monospace"
-						:class="{ active: activeLink === tab }"
-						href="#"
-						>{{ tab }}</a
-					>
-				</li>
-			</ul>
+			<AppTabs
+				:active-link="activeLink"
+				:tab-data="tabs"
+				@add-class="activTab"
+			/>
 
 			<component :is="tabs[activeLink]"></component>
 		</div>

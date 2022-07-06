@@ -20,6 +20,11 @@ const routes = [
 		name: 'user',
 		component: () => import('../views/UserView.vue'),
 	},
+	{
+		path: '/category',
+		name: 'category',
+		component: () => import('../views/CategoryMediaView.vue'),
+	},
 ];
 
 const router = createRouter({

@@ -7,6 +7,8 @@ import MediaActions from './MediaActions.vue';
 
 import { getObjectByArray } from '../utils/getObjectByArray';
 
+const emit = defineEmits(['addToWatchList', 'addToWatchLater']);
+
 const props = defineProps({
 	mediaData: {
 		type: Object,
@@ -43,8 +45,6 @@ const headerMap = [
 	'runtimeStr',
 	'ratings',
 ];
-
-const emit = defineEmits(['addToWatchList', 'addToWatchLater']);
 
 const addToWatchList = (options) => emit('addToWatchList', options);
 
