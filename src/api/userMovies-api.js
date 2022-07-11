@@ -30,8 +30,11 @@ export class userMovieApi {
 			}
 			movieData.push(info);
 		});
-		console.log(movieData);
-		return movieData;
+
+		const sortByDate = (a, b) =>
+			new Date(a.createTime).getTime() - new Date(b.createTime).getTime();
+
+		return movieData.sort(sortByDate);
 	}
 
 	static async getUserMovieInfoById(id) {

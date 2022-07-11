@@ -9,7 +9,7 @@ export const formatDate = (d, opt, isTime) => {
 
 	const time = isTime && { hour: 'numeric', minute: 'numeric' };
 
-	return new Intl.DateTimeFormat('ru-RU', {
+	return new Intl.DateTimeFormat('en-GB', {
 		...time,
 		...opt,
 	}).format(date);

@@ -1,14 +1,52 @@
 <script setup>
 import { computed, onMounted, ref } from 'vue';
 import { useMoviesCounterStore } from '../stores/moviesCounter';
+
 import AppPreloader from './AppPreloader.vue';
+import AppApexchart from './AppApexchart.vue';
+import { userMovieApi } from '../api/userMovies-api';
+
+import { formatDate } from '../utils/formatDate';
 
 const moviesCounterStore = useMoviesCounterStore();
 
 const isLoading = ref(true);
 
+const vote = ref([]);
+const data = ref([]);
+const title = ref([]);
+
+console.log(formatDate('2022-06-27T20:10:54.759035Z', true, true));
+
+console.log(new Date('2022-06-27T20:10:54.759035Z').getTime());
+
 const loadData = async () => {
 	isLoading.value = true;
+	await userMovieApi.getUserMovieList().then((r) => {
+		console.log(r);
+
+		// const a = r.reduce((acc, curr) => {
+		// 	if (curr.vote) {
+		// 		acc = [...acc, curr.vote];
+		// 	}
+		// 	return acc;
+		// }, []);
+		// console.log(a);
+		// return a;
+		r.forEach((el) => {
+			if (el.vote !== 0) {
+				vote.value.push(el.vote);
+				title.value.push(el.title);
+				data.value.push(
+					formatDate(el.createTime, {
+						year: '2-digit',
+						month: '2-digit',
+						day: 'numeric',
+					})
+				);
+			}
+		});
+	});
 	await moviesCounterStore.loadCounterMovies();
 	isLoading.value = false;
 };
@@ -78,7 +116,14 @@ const moviesCounter = computed(() => moviesCounterStore.getMoviesCounter);
 				</a>
 			</li>
 		</ul>
+
+		<AppApexchart
+			:vote="vote"
+			:data="data"
+			:title="title"
+		/>
 	</div>
+
 	<AppPreloader v-else />
 </template>
 
