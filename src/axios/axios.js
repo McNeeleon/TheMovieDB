@@ -2,7 +2,7 @@ import axios from 'axios';
 
 const env = import.meta.env;
 
-const API_KEY = env.VITE_APP_IMDB_API_KEY;
+const API_KEY = env.VITE_APP_IMDB_API_KEY_1;
 const FIREBASE_ID = env.VITE_APP_FIREBASE_ID;
 
 const imbdbAxios = axios.create({

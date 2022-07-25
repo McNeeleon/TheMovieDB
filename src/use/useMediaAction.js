@@ -1,18 +1,41 @@
-import { useMoviesCounterStore } from '../stores/moviesCounter';
+import { ref } from 'vue';
 
 import { userMovieApi } from '../api/userMovies-api';
 
 import { getObjectByArray } from '../utils/getObjectByArray';
 
-export default function (
-	mediaData,
-	movieVote,
-	actionsList,
-	watchLater,
-	movieId
-) {
-	const moviesCounterStore = useMoviesCounterStore();
+const watchLater = ref(false);
 
+const actionsList = ref([
+	{
+		name: 'Like',
+		inList: false,
+		id: 'like',
+	},
+	{
+		name: 'Watched',
+		inList: false,
+		id: 'watched',
+	},
+	{
+		name: 'Watch later',
+		inList: watchLater,
+		id: 'watchLater',
+	},
+	{
+		name: 'Favorite films',
+		inList: false,
+		id: 'favoriteFilms',
+	},
+]);
+
+export default (
+	mediaData,
+	movieId,
+	moviesCounterStore,
+	movieAddingTime,
+	movieVote
+) => {
 	const infoMap = [
 		'title',
 		'image',
@@ -20,6 +43,7 @@ export default function (
 		'runtimeMins',
 		'imDbRating',
 		'vote',
+		'id',
 		'countries',
 	];
 
@@ -36,10 +60,15 @@ export default function (
 
 		const movieInfo = getObjectByArray(infoMap, mediaData.value);
 
-		userMovieApi.postUserMovieInfo(actionsList, movieId, {
-			...movieInfo,
-			vote: movieVote.value,
-		});
+		userMovieApi.postUserMovieInfo(
+			actionsList,
+			movieId,
+			movieAddingTime.value,
+			{
+				...movieInfo,
+				vote: movieVote.value,
+			}
+		);
 	};
 
 	const watchListHandler = (options) => {
@@ -54,12 +83,15 @@ export default function (
 
 		const movieInfo = getObjectByArray(infoMap, mediaData.value);
 
-		console.log(movieInfo);
-
-		userMovieApi.postUserMovieInfo(actionsList, movieId, {
-			...movieInfo,
-			vote: movieVote.value,
-		});
+		userMovieApi.postUserMovieInfo(
+			actionsList,
+			movieId,
+			movieAddingTime.value,
+			{
+				...movieInfo,
+				vote: movieVote.value,
+			}
+		);
 	};
 
 	const watchLaterHandler = () => {
@@ -72,11 +104,24 @@ export default function (
 
 		const movieInfo = getObjectByArray(infoMap, mediaData.value);
 
-		userMovieApi.postUserMovieInfo(actionsList, movieId, {
-			...movieInfo,
-			vote: movieVote.value,
-		});
+		userMovieApi.postUserMovieInfo(
+			actionsList,
+			movieId,
+			movieAddingTime.value,
+			{
+				...movieInfo,
+				vote: movieVote.value,
+			}
+		);
 	};
 
-	return { setRating, watchListHandler, watchLaterHandler };
-}
+	return {
+		setRating,
+		watchListHandler,
+		watchLaterHandler,
+		movieAddingTime,
+		watchLater,
+		actionsList,
+		movieVote,
+	};
+};

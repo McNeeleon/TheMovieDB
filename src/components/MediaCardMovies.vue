@@ -48,8 +48,6 @@ const headerMap = [
 
 const addToWatchList = (options) => emit('addToWatchList', options);
 
-const addToWatchLater = () => emit('addToWatchLater');
-
 const headerInfo = getObjectByArray(headerMap, props.mediaData);
 
 const mediaInfo = getObjectByArray(infoMap, props.mediaData);
@@ -82,7 +80,7 @@ const starList = props.mediaData.actorList.filter((el) =>
 					<MediaActions
 						:actions-list="actionsList"
 						@add-to-watch-list="addToWatchList"
-						@add-to-watch-later="addToWatchLater"
+						@add-to-watch-later="$emit('addToWatchLater')"
 					/>
 				</div>
 			</div>

@@ -40,7 +40,7 @@
 
 						<div class="fw-normal">
 							<router-link
-								to="/user"
+								:to="{ name: 'user', params: { categor: 'profile' } }"
 								href="#"
 								class="nav-link p-0"
 							>

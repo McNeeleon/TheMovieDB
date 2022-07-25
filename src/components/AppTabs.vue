@@ -1,6 +1,6 @@
 <script setup>
 defineEmits({
-	addClass: null,
+	activeTab: null,
 });
 
 defineProps({
@@ -8,7 +8,7 @@ defineProps({
 		type: String,
 		default: '',
 	},
-	tabData: {
+	tabsComponent: {
 		type: Object,
 		default: () => {},
 	},
@@ -18,7 +18,7 @@ defineProps({
 <template>
 	<ul class="tab nav nav-tabs mb-3 border-bottom-0">
 		<li
-			v-for="(item, idx) in tabData"
+			v-for="(_, idx) in tabsComponent"
 			:key="idx"
 			href="#"
 			class="nav-item"
@@ -27,7 +27,7 @@ defineProps({
 				class="nav-link px-3 text-muted fw-600 font-monospace"
 				href="#"
 				:class="{ active: idx === activeLink }"
-				@click="$emit('addClass', idx)"
+				@click="$emit('activeTab', idx)"
 				>{{ idx }}</a
 			>
 		</li>
@@ -39,10 +39,9 @@ defineProps({
 	.nav-link {
 		background-color: #f8f9fa;
 		box-shadow: 0px 3px 1px 0px rgba(0, 0, 0, 0.1);
-		text-decoration: underline;
-		&:hover {
-			// background-color: #e9ecef;
-			text-decoration: underline;
+
+		&:hover:not(.active) {
+			background-color: #f0f1f3;
 		}
 		&.active {
 			color: orange !important;

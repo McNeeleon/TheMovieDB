@@ -5,7 +5,7 @@ export const useMoviesCounterStore = defineStore('counter', {
 	state: () => ({
 		moviesCounter: [
 			{ type: 'Movie', count: 0, id: 'movie' },
-			{ type: 'Serial', count: 0, id: 'serial' },
+			{ type: 'Serial', count: 0, id: 'tvseries' },
 			{ type: 'Favotite', count: 0, id: 'favoriteFilms' },
 			{ type: 'Like', count: 0, id: 'like' },
 			{ type: 'Watch later', count: 0, id: 'watchLater' },
@@ -18,6 +18,7 @@ export const useMoviesCounterStore = defineStore('counter', {
 			const category = this.moviesCounter.find(
 				(el) => el.id === id || (id === 'watched' && movieType === el.id)
 			);
+
 			const count = inInList ? ++category.count : --category.count;
 
 			const path = id === 'watched' ? movieType : id;
@@ -30,8 +31,8 @@ export const useMoviesCounterStore = defineStore('counter', {
 				const data = await userMovieApi.getMovieCounter();
 
 				this.moviesCounter.filter((el) =>
-					data.filter((d) => {
-						return el.id === d.id ? (el.count = d.count) : el;
+					data.filter((r) => {
+						return el.id === r.id ? (el.count = r.count) : el;
 					})
 				);
 			} catch {}

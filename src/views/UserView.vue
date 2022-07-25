@@ -1,47 +1,33 @@
 <script setup>
-import { ref } from 'vue';
-
-import Category from '../components/UserCategoryList.vue';
-import Profile from '../components/UserProfile.vue';
-import Votes from '../components/UserVotes.vue';
+import category from '../components/UserCategoryList.vue';
+import profile from '../components/UserProfile.vue';
+import votes from '../components/UserVotes.vue';
 import AppTabs from '../components/AppTabs.vue';
 
-const tabs = { Profile, Votes, Category };
+import useTabControl from '../use/useTabControl';
 
-const activeLink = ref('Profile');
+const { handlerTab, currTab } = useTabControl();
 
-const activTab = (idx) => (activeLink.value = idx);
+const tabs = { profile, votes, category };
 </script>
 
 <template>
-	<div class="container-sm px-sm-2 px-md-5">
+	<div
+		class="container-sm px-sm-2 px-md-5"
+		style="max-width: 960px"
+	>
 		<div class="user-page bg-white">
 			<AppTabs
-				:active-link="activeLink"
-				:tab-data="tabs"
-				@add-class="activTab"
+				:active-link="currTab"
+				:tabs-component="tabs"
+				@active-tab="handlerTab"
 			/>
 
-			<component :is="tabs[activeLink]"></component>
+			<keep-alive>
+				<component :is="tabs[currTab]"></component>
+			</keep-alive>
 		</div>
 	</div>
 </template>
 
-<style lang="scss">
-.user-nav {
-	.nav-link {
-		background-color: #f8f9fa;
-		box-shadow: 0px 3px 1px 0px rgba(0, 0, 0, 0.1);
-		text-decoration: underline;
-		&:hover {
-			// background-color: #e9ecef;
-			text-decoration: underline;
-		}
-		&.active {
-			color: orange !important;
-			text-decoration: none;
-			box-shadow: none;
-		}
-	}
-}
-</style>
+<style lang="scss"></style>

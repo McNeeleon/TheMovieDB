@@ -1,25 +1,31 @@
+<script setup>
+import SvgIcon from './SvgIcon.vue';
+const menuItems = [
+	{ name: 'movie', icon: 'movie', params: 'popular' },
+	{ name: 'serial', icon: 'serial', params: 'popular' },
+];
+</script>
+
 <template>
 	<ul class="menu-dromdown rounded-3 rounded-top-0">
-		<li class="nav">
-			<routerLink :to="{ name: 'category', query: { cat: 'movie' } }">
-				<svg
-					xmlns="http://www.w3.org/2000/svg"
-					width="18"
-					height="18"
-					fill="#6c757d"
-					class="bi bi-camera-video"
-					viewBox="0 0 16 16"
-				>
-					<path
-						fill-rule="evenodd"
-						d="M0 5a2 2 0 0 1 2-2h7.5a2 2 0 0 1 1.983 1.738l3.11-1.382A1 1 0 0 1 16 4.269v7.462a1 1 0 0 1-1.406.913l-3.111-1.382A2 2 0 0 1 9.5 13H2a2 2 0 0 1-2-2V5zm11.5 5.175 3.5 1.556V4.269l-3.5 1.556v4.35zM2 4a1 1 0 0 0-1 1v6a1 1 0 0 0 1 1h7.5a1 1 0 0 0 1-1V5a1 1 0 0 0-1-1H2z"
-					/>
-				</svg>
-				<span>Movie </span></routerLink
+		<li
+			v-for="(item, index) in menuItems"
+			:key="index"
+			class="nav"
+		>
+			<routerLink
+				:to="{ name: item.name, params: { categor: item.params } }"
+				:class="{ active: $route.name === item.name }"
 			>
+				<SvgIcon :name="item.icon" />
+				<span>{{ item.name }}</span>
+			</routerLink>
 		</li>
-		<li class="nav">
-			<routerLink :to="{ name: 'category', query: { cat: 'serial' } }">
+		<!-- <li class="nav">
+			<routerLink
+				:to="{ name: 'serial', params: { categor: 'top' } }"
+				:class="{ active: $route.name === 'serial' }"
+			>
 				<svg
 					xmlns="http://www.w3.org/2000/svg"
 					width="16"
@@ -32,10 +38,10 @@
 						d="M0 1a1 1 0 0 1 1-1h14a1 1 0 0 1 1 1v14a1 1 0 0 1-1 1H1a1 1 0 0 1-1-1V1zm4 0v6h8V1H4zm8 8H4v6h8V9zM1 1v2h2V1H1zm2 3H1v2h2V4zM1 7v2h2V7H1zm2 3H1v2h2v-2zm-2 3v2h2v-2H1zM15 1h-2v2h2V1zm-2 3v2h2V4h-2zm2 3h-2v2h2V7zm-2 3v2h2v-2h-2zm2 3h-2v2h2v-2z"
 					/>
 				</svg>
-				<span>Serial</span></routerLink
-			>
-		</li>
-		<li class="nav">
+				<span>Serial</span>
+			</routerLink>
+		</li> -->
+		<!-- <li class="nav">
 			<routerLink
 				:to="{ name: 'category', query: { cat: 'top' } }"
 				href="#"
@@ -73,7 +79,7 @@
 				</svg>
 				<span>Soon</span>
 			</routerLink>
-		</li>
+		</li> -->
 	</ul>
 </template>
 
@@ -97,7 +103,7 @@ $menu-color: #2a2a2b;
 
 	background-color: $menu-color;
 	padding: 60px 20px 10px;
-	min-height: 200px;
+	// min-height: 200px;
 
 	li {
 		margin-bottom: 10px;
@@ -111,16 +117,23 @@ $menu-color: #2a2a2b;
 		font-weight: 600;
 
 		&:hover {
-			color: #fff;
+			color: #fdb42d;
+			font-weight: bold;
 		}
 
 		&:hover svg {
-			fill: #fff;
+			stroke: #fdb42d;
 		}
 
 		svg {
 			margin-right: 10px;
 		}
+	}
+	.active {
+		color: #ffe15c;
+	}
+	.active svg {
+		stroke: #ffe15c;
 	}
 }
 </style>

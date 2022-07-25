@@ -1,6 +1,6 @@
 import { imbdbAxios, API_KEY } from '../axios/axios';
 
-export default class ImdbApi {
+export class ImdbApi {
 	static async getTitleById(titleId, options = []) {
 		const { data } = await imbdbAxios.get(
 			`/en/API/Title/${API_KEY}/${titleId}/${options}`

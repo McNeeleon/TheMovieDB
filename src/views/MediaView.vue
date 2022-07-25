@@ -1,27 +1,28 @@
 <script setup>
-import { onMounted, ref } from 'vue';
-import { useMoviesCounterStore } from '../stores/moviesCounter';
-
-import { userMovieApi } from '../api/userMovies-api';
-import ImdbApi from '../api/movies-api';
-
 import AppStarRating from '../components/AppStarRating.vue';
 import MediaTopCast from '../components/MediaTopCast.vue';
 import MediaCardMovies from '../components/MediaCardMovies.vue';
 import MediaImages from '../components/MediaImages.vue';
-
-import useedMediaAction from '../use/useedMediaAction';
 import AppPreloader from '../components/AppPreloader.vue';
 
-import observer from '../utils/observer';
+import useMediaAction from '../use/useMediaAction';
+import useLoadMediaData from '../use/useLoadMediaData';
+
+import { useMoviesCounterStore } from '../stores/moviesCounter';
+import { ref } from 'vue';
 
 const moviesCounterStore = useMoviesCounterStore();
 
 const props = defineProps({
 	id: {
 		type: String,
+		default: '',
 	},
 });
+
+const mediaData = ref([]);
+const movieVote = ref(0);
+const movieAddingTime = ref(0);
 
 // const mediaData = {
 // 	id: 'tt1877830',
@@ -577,88 +578,24 @@ const props = defineProps({
 // 	],
 // };
 
-const movieVote = ref(0);
+// TODO const name onserver
 
-const mediaData = ref([]);
-const mediaImages = ref([]);
+const { setRating, watchLaterHandler, watchListHandler, actionsList } =
+	useMediaAction(
+		mediaData,
+		props.id,
+		moviesCounterStore,
+		movieAddingTime,
+		movieVote
+	);
 
-const isLoading = ref(true);
-const isImgLoading = ref(true);
-
-const imgObserver = ref(null);
-
-const watchLater = ref(false);
-
-const actionsList = ref([
-	{
-		name: 'Like',
-		inList: false,
-		id: 'like',
-	},
-	{
-		name: 'Watched',
-		inList: false,
-		id: 'watched',
-	},
-	{
-		name: 'Watch later',
-		inList: watchLater,
-		id: 'watchLater',
-	},
-	{
-		name: 'Favorite films',
-		inList: false,
-		id: 'favoriteFilms',
-	},
-]);
-
-const loadMovieById = () => {
-	ImdbApi.getTitleById(props.id, ['Ratings'])
-		.then((res) => {
-			isLoading.value = true;
-			mediaData.value = res;
-			isLoading.value = false;
-		})
-		.then((_) => {
-			observImg.observe(imgObserver.value);
-		});
-};
-
-const loadUserMovieInfo = () => {
-	moviesCounterStore.loadCounterMovies();
-
-	userMovieApi
-		.getUserMovieInfoById(props.id)
-		.then((response) => {
-			actionsList.value.map((el) =>
-				Object.assign(el, {
-					inList: response.list[el.id].booleanValue,
-				})
-			);
-			movieVote.value = +response.info.vote.integerValue;
-		})
-		.catch((e) => e);
-};
-
-const observCallback = () => {
-	isImgLoading.value = true;
-	ImdbApi.getTitleImages(props.id).then((res) => {
-		mediaImages.value = res.items;
-		isImgLoading.value = false;
-		observImg.unobserve(imgObserver.value);
-	});
-};
-
-onMounted([loadMovieById, loadUserMovieInfo]);
-
-const observImg = observer(observCallback);
-
-const { setRating, watchLaterHandler, watchListHandler } = useedMediaAction(
-	mediaData,
-	movieVote,
+const { isLoading, mediaImages, imgObserver, isImgLoading } = useLoadMediaData(
+	props.id,
+	moviesCounterStore,
 	actionsList,
-	watchLater,
-	props.id
+	mediaData,
+	movieAddingTime,
+	movieVote
 );
 </script>
 

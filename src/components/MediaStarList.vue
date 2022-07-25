@@ -12,7 +12,7 @@
 					<!-- <div style="width: 200px; height: 250px"> -->
 					<img
 						:src="item.image"
-						style="width: 100%; height: 130px"
+						style="width: 100%; height: 130px; object-fit: cover"
 						:alt="item.name"
 						class="rounded"
 					/>

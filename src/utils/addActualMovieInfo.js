@@ -1,8 +1,8 @@
 export const addFlagList = (movieInfoList, actionsList) => {
 	Object.entries(movieInfoList).filter(([key, val]) =>
-		actionsList.value.filter(
-			(el) => el.id === key && (val.booleanValue = el.inList)
-		)
+		actionsList.value.filter((el) => {
+			return el.id === key && (val.booleanValue = el.inList);
+		})
 	);
 };
 

@@ -27,8 +27,6 @@ const isDropdownList = ref(false);
 
 const actionHandler = (item) => emit('addToWatchList', item);
 
-const addToWatchLater = () => emit('addToWatchLater');
-
 const isWatchLater = computed(() =>
 	props.actionsList.find((el) => el.id === 'watchLater')
 );
@@ -40,7 +38,7 @@ const isWatchLater = computed(() =>
 			<button
 				class="btn btn-light px-1 border w-80 text-start ps-2"
 				style="width: 80%"
-				@click="addToWatchLater"
+				@click="$emit('addToWatchLater')"
 			>
 				<svg
 					v-if="!isWatchLater.inList"

@@ -12,29 +12,45 @@
 
 <script>
 import VueApexCharts from 'vue3-apexcharts';
+import { ref } from 'vue';
+import { formatDate } from '../utils/formatDate';
+
 export default {
 	components: {
 		apexchart: VueApexCharts,
 	},
 };
 </script>
-
 <script setup>
 const props = defineProps({
-	vote: {
+	mediaData: {
 		type: Array,
 		default: () => [],
 	},
-	data: null,
-	title: null,
 });
 
-console.log(props.vote);
+const vote = ref([]);
+const date = ref([]);
+const title = ref([]);
+
+props.mediaData.forEach((el) => {
+	if (el.vote !== 0) {
+		vote.value.push(el.vote);
+		title.value.push(el.title);
+		date.value.push(
+			formatDate(el.createTime, {
+				year: '2-digit',
+				month: '2-digit',
+				day: 'numeric',
+			})
+		);
+	}
+});
 
 const series = [
 	{
 		name: false,
-		data: props.vote,
+		data: vote.value,
 	},
 ];
 const chartOptions = {
@@ -60,12 +76,12 @@ const chartOptions = {
 			fontSize: '16px',
 			fontWeight: 'normal',
 			fontFamily: 'inherit',
-			color: '#fa6f00',
+			color: '#ff9d00',
 		},
 	},
 
 	xaxis: {
-		categories: props.data,
+		categories: date.value,
 		labels: {
 			show: true,
 		},
@@ -112,7 +128,7 @@ const chartOptions = {
 				'<span class="d-block lh-1 ">' +
 				series[seriesIndex][dataPointIndex] +
 				'</span>' +
-				props.title[dataPointIndex] +
+				title.value[dataPointIndex] +
 				'</div>'
 			);
 		},

@@ -1,10 +1,7 @@
-import { watch } from 'vue';
+import { unref } from 'vue';
 
-export default function (item, newCategory) {
-	watch(newCategory, () => {
-		item.value.forEach((el) => observer.observe(el));
-	});
-
+export default function (item) {
+	item = unref(item);
 	const callback = (entries) => {
 		entries.forEach((entry) => {
 			if (entry.isIntersecting) {
@@ -22,5 +19,5 @@ export default function (item, newCategory) {
 	};
 	const observer = new IntersectionObserver(callback, options);
 
-	item.value.forEach((el) => observer.observe(el));
+	item.forEach((el) => observer.observe(el));
 }

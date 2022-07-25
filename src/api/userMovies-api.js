@@ -2,39 +2,33 @@ import { firebaseAxios, FIREBASE_ID } from '../axios/axios';
 
 import { addFlagList, addMovieInfo } from '../utils/addActualMovieInfo';
 
+import { formatDataToArray } from '../utils/formatDataToArray';
+
 export class userMovieApi {
-	static async getUserMovieList() {
-		const { data } = await firebaseAxios.get(
-			`/v1/projects/${FIREBASE_ID}/databases/(default)/documents/MovieList`
-		);
+	static async getMovieListByPaginate(pageSize, nextPageToken) {
+		try {
+			const { data } = await firebaseAxios.get(
+				`v1/projects/${FIREBASE_ID}/databases/(default)/documents/MovieList?pageSize=${pageSize}&pageToken=${nextPageToken}`
+			);
+			const movieData = formatDataToArray(data.documents);
 
-		const movieData = [];
+			return { movieData, nextPageToken: data.nextPageToken };
+		} catch (error) {
+			// console.log(error);
+			// return error;
+		}
+	}
 
-		data.documents.forEach((item) => {
-			const info = {};
+	static async getUserMovieList(pageSize = 20) {
+		try {
+			const { data } = await firebaseAxios.get(
+				`/v1/projects/${FIREBASE_ID}/databases/(default)/documents/MovieList?pageSize=${pageSize}`
+			);
 
-			const id = item.name.split('/');
-			const createTime = item.createTime;
-
-			info.id = id[id.length - 1];
-			info.createTime = createTime;
-
-			for (const key in item.fields) {
-				const element = item.fields[key].mapValue.fields;
-
-				Object.entries(element).forEach(([key, val]) => {
-					for (const el in val) {
-						info[key] = el === 'integerValue' ? +val[el] : val[el];
-					}
-				});
-			}
-			movieData.push(info);
-		});
-
-		const sortByDate = (a, b) =>
-			new Date(a.createTime).getTime() - new Date(b.createTime).getTime();
-
-		return movieData.sort(sortByDate);
+			const movieData = formatDataToArray(data.documents);
+			// const movieData = [];
+			return { movieData, nextPageToken: data.nextPageToken };
+		} catch (error) {}
 	}
 
 	static async getUserMovieInfoById(id) {
@@ -46,6 +40,7 @@ export class userMovieApi {
 			return {
 				list: data.fields.list.mapValue.fields,
 				info: data.fields.info.mapValue.fields,
+				addedTeme: data.fields.addedTeme.integerValue,
 			};
 		} catch {}
 	}
@@ -64,7 +59,9 @@ export class userMovieApi {
 			});
 
 			return formatData;
-		} catch (e) {}
+		} catch (e) {
+			console.log(e);
+		}
 	}
 
 	static async postMovieCounter(count, path) {
@@ -86,7 +83,12 @@ export class userMovieApi {
 		}
 	}
 
-	static async postUserMovieInfo(actionsList, movieId, movieInfo) {
+	static async postUserMovieInfo(
+		actionsList,
+		movieId,
+		movieAddingTime,
+		movieInfo
+	) {
 		const movieInfoList = {
 			fields: {
 				list: {
@@ -132,21 +134,37 @@ export class userMovieApi {
 							vote: {
 								integerValue: 0,
 							},
+							id: {
+								stringValue: '',
+							},
 						},
 					},
 				},
+
+				addedTeme: {
+					integerValue: 0,
+				},
 			},
 		};
+		console.log(actionsList, movieId, movieAddingTime, movieInfo);
 
 		addFlagList(movieInfoList.fields.list.mapValue.fields, actionsList);
 		addMovieInfo(movieInfoList.fields.info.mapValue.fields, movieInfo);
 
-		console.log(movieInfoList);
-		console.log(movieInfo);
+		if (movieAddingTime) {
+			movieInfoList.fields.addedTeme.integerValue = movieAddingTime;
+		} else {
+			movieInfoList.fields.addedTeme.integerValue = new Date().getTime();
+		}
 
 		try {
 			firebaseAxios.patch(
 				`https://firestore.googleapis.com/v1/projects/${FIREBASE_ID}/databases/(default)/documents/MovieList/${movieId}`,
+				movieInfoList
+			);
+
+			firebaseAxios.patch(
+				`https://firestore.googleapis.com/v1/projects/${FIREBASE_ID}/databases/(default)/documents/MovieList2/${movieInfoList.fields.addedTeme.integerValue}`,
 				movieInfoList
 			);
 		} catch (e) {

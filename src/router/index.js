@@ -16,20 +16,27 @@ const routes = [
 		props: true,
 	},
 	{
-		path: '/user',
+		path: '/user/:categor',
 		name: 'user',
 		component: () => import('../views/UserView.vue'),
 	},
 	{
-		path: '/category',
-		name: 'category',
-		component: () => import('../views/CategoryMediaView.vue'),
+		path: '/serial/:categor',
+		name: 'serial',
+		component: () => import('../views/SerialView.vue'),
+	},
+	{
+		path: '/movie/:categor',
+		name: 'movie',
+		component: () => import('../views/MovieView.vue'),
 	},
 ];
 
 const router = createRouter({
 	history: createWebHistory(),
 	routes,
+	linkActiveClass: 'active',
+	linkExactActiveClass: 'active',
 });
 
 export default router;

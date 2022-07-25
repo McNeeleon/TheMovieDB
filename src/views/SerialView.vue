@@ -1,6 +1,5 @@
 <script setup>
 import AppTabs from '../components/AppTabs.vue';
-
 import popular from '../components/CategoryPopular.vue';
 import top from '../components/CategoryTop.vue';
 
@@ -27,6 +26,7 @@ const tabs = { popular, top };
 					@active-tab="handlerTab"
 				/>
 			</div>
+
 			<keep-alive>
 				<component
 					:is="tabs[currTab]"

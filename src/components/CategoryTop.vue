@@ -1,39 +1,34 @@
 <script setup>
-import { computed } from '@vue/reactivity';
-import { onMounted, ref, watch } from 'vue';
+import { computed, ref } from '@vue/reactivity';
+import { onMounted } from 'vue';
 
 import CategoryCardMovies from '../components/CategoryCardMovies.vue';
 import AppPreloader from './AppPreloader.vue';
 
-import moviesApi from '../api/movies-api';
+import { ImdbApi } from '../api/movies-api';
 
 const props = defineProps({
 	mediaType: {
 		type: String,
-		default: 'Movie',
+		default: 'movie',
 	},
 });
 
-const topMedia = ref(null);
+const topMedia = ref([]);
 
 const topLoading = ref(true);
 
 const apiType = computed(() =>
-	props.mediaType === 'serial' ? 'getTopSerial' : 'getTopMovies'
+	props.mediaType === 'movie' ? 'getTopMovies' : 'getTopSerial'
 );
 
 const getMedia = () => {
 	topLoading.value = true;
-	moviesApi[apiType.value]().then((response) => {
+	ImdbApi[apiType.value]().then((response) => {
 		topMedia.value = response;
 		topLoading.value = false;
 	});
 };
-
-watch(
-	() => props.categoryData,
-	() => getMedia()
-);
 
 onMounted(getMedia);
 </script>
@@ -43,7 +38,7 @@ onMounted(getMedia);
 		<CategoryCardMovies
 			v-if="!topLoading"
 			:data="topMedia"
-			:classes="'col-6 col-sm-3 col-md-3 col-lg-2 col-xl-2'"
+			:classes="'col-6 col-sm-4 col-md-3 col-lg-2 col-xl-2'"
 		/>
 		<AppPreloader v-else />
 	</div>
