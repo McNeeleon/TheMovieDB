@@ -4,17 +4,20 @@ import MediaView from '../views/MediaView.vue';
 
 const routes = [
 	{ path: '/main', name: 'main', component: MainView, alias: '/' },
-	{
-		path: '/popular',
-		name: 'popular',
-		component: () => import('../views/PopularView.vue'),
-	},
+
 	{
 		path: '/media/:id',
 		name: 'media',
 		component: MediaView,
 		props: true,
 	},
+
+	{
+		path: '/search',
+		name: 'search',
+		component: () => import('../views/SearchView.vue'),
+	},
+
 	{
 		path: '/user/:categor',
 		name: 'user',
@@ -29,6 +32,11 @@ const routes = [
 		path: '/movie/:categor',
 		name: 'movie',
 		component: () => import('../views/MovieView.vue'),
+	},
+	{
+		path: '/InTheater',
+		name: 'InTheater',
+		component: () => import('../views/InTheaterView.vue'),
 	},
 ];
 

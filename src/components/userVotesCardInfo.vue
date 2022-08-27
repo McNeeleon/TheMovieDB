@@ -3,7 +3,7 @@ import UserVotesCardInfoSvg from './UserVotesCardInfoSvg.vue';
 
 import usedFormatNumber from '../use/usedFormatNumber';
 
-import usedColorVote from '../use/usedColorVote';
+import useColorVote from '../use/useColorVote';
 
 defineProps({
 	cardInfo: {
@@ -14,17 +14,17 @@ defineProps({
 
 const { formatInteger } = usedFormatNumber();
 
-const { color } = usedColorVote();
+const { color } = useColorVote();
 </script>
 
 <template>
-	<div class="vote-info ps-3">
-		<routerLink
+	<div class="vote-info px-3">
+		<router-link
 			:to="{ name: 'media', params: { id: cardInfo.id } }"
 			class="nav-link fw-bold color-555 p-0 lh-1 truncate-text"
 		>
 			{{ cardInfo.title }}
-		</routerLink>
+		</router-link>
 
 		<div class="color-555">{{ cardInfo.year }} {{ cardInfo.countries }}</div>
 

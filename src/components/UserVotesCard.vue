@@ -37,7 +37,9 @@ defineProps({
 
 		<div class="col-5 d-none d-sm-block">
 			<div class="d-flex justify-content-between align-cardInfos-center">
-				<span class="">{{ formatDate(cardInfo.createTime, true, true) }}</span>
+				<span class="ps-0">{{
+					formatDate(cardInfo.createTime, true, true)
+				}}</span>
 
 				<UserVotesCardBadge :vote="cardInfo.vote" />
 			</div>

@@ -1,6 +1,7 @@
 <script setup>
 import { onMounted, ref, watch } from 'vue';
 import { computed } from '@vue/reactivity';
+import { useRoute } from 'vue-router';
 import { useMoviesCounterStore } from '../stores/moviesCounter';
 
 import AppApexchart from './AppApexchart.vue';
@@ -11,7 +12,6 @@ import AppPreloader from './AppPreloader.vue';
 import { sortByDate } from '../utils/sortByDate';
 
 import { userMovieApi } from '../api/userMovies-api';
-import { useRoute } from 'vue-router';
 
 const route = useRoute();
 const moviesCounterStore = useMoviesCounterStore();
@@ -61,9 +61,12 @@ onMounted(loadData);
 		<UserProfileMediaCount :movies-counter="moviesCounter" />
 
 		<AppApexchart
-			v-if="mediaData.length && tabIsActive"
+			v-if="mediaData.length > 5 && tabIsActive"
 			:media-data="mediaData"
 		/>
+		<template v-else>
+			<div class="alert alert-dark">Not enough movies to display graph</div>
+		</template>
 	</div>
 	<AppPreloader v-else />
 </template>

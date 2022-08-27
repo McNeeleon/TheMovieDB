@@ -14,10 +14,7 @@ const tabs = { popular, top };
 	<div class="container-xl">
 		<div class="categoty bg-white px-2 px-sm-3">
 			<div class="d-flex justify-content-between">
-				<p
-					class="fs-3 fw-600 my-1"
-					style="font-family: cursive"
-				>
+				<p class="fs-3 fw-600 my-1">
 					{{ route.name }}
 				</p>
 				<AppTabs

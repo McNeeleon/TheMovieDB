@@ -14,8 +14,7 @@ export class userMovieApi {
 
 			return { movieData, nextPageToken: data.nextPageToken };
 		} catch (error) {
-			// console.log(error);
-			// return error;
+			throw new Error(error);
 		}
 	}
 
@@ -24,11 +23,12 @@ export class userMovieApi {
 			const { data } = await firebaseAxios.get(
 				`/v1/projects/${FIREBASE_ID}/databases/(default)/documents/MovieList?pageSize=${pageSize}`
 			);
-
 			const movieData = formatDataToArray(data.documents);
-			// const movieData = [];
+
 			return { movieData, nextPageToken: data.nextPageToken };
-		} catch (error) {}
+		} catch (error) {
+			throw new Error(error);
+		}
 	}
 
 	static async getUserMovieInfoById(id) {
@@ -40,7 +40,7 @@ export class userMovieApi {
 			return {
 				list: data.fields.list.mapValue.fields,
 				info: data.fields.info.mapValue.fields,
-				addedTeme: data.fields.addedTeme.integerValue,
+				movieAddingTime: data.fields.movieAddingTime.integerValue,
 			};
 		} catch {}
 	}
@@ -48,14 +48,17 @@ export class userMovieApi {
 	static async getMovieCounter() {
 		try {
 			const { data } = await firebaseAxios.get(
-				`https://firestore.googleapis.com/v1/projects/${FIREBASE_ID}/databases/(default)/documents/MovieCount`
+				`/v1/projects/${FIREBASE_ID}/databases/(default)/documents/MovieCount`
 			);
 			const formatData = data.documents.map((el) => {
 				const id = el.name.split('/');
-				return Object.assign({
+				return {
 					count: +el.fields.counter.integerValue,
 					id: id[id.length - 1],
-				});
+					...(el.fields?.viewingTime?.integerValue && {
+						viewingTime: el.fields.viewingTime.integerValue,
+					}),
+				};
 			});
 
 			return formatData;
@@ -64,18 +67,21 @@ export class userMovieApi {
 		}
 	}
 
-	static async postMovieCounter(count, path) {
+	static async postMovieCounter(count, path, runtimeMinsCount) {
 		const data = {
 			fields: {
 				counter: {
 					integerValue: count,
 				},
+				...(runtimeMinsCount && {
+					viewingTime: { integerValue: runtimeMinsCount },
+				}),
 			},
 		};
 
 		try {
 			firebaseAxios.patch(
-				`https://firestore.googleapis.com/v1beta1/projects/${FIREBASE_ID}/databases/(default)/documents/MovieCount/${path}?updateMask.fieldPaths=counter`,
+				`v1/projects/${FIREBASE_ID}/databases/(default)/documents/MovieCount/${path}?updateMask.fieldPaths=counter&updateMask.fieldPaths=viewingTime`,
 				data
 			);
 		} catch (error) {
@@ -122,6 +128,7 @@ export class userMovieApi {
 							year: {
 								integerValue: 0,
 							},
+
 							imDbRating: {
 								doubleValue: 0,
 							},
@@ -141,21 +148,20 @@ export class userMovieApi {
 					},
 				},
 
-				addedTeme: {
-					integerValue: 0,
+				movieAddingTime: {
+					integerValue: movieAddingTime,
 				},
 			},
 		};
-		console.log(actionsList, movieId, movieAddingTime, movieInfo);
 
 		addFlagList(movieInfoList.fields.list.mapValue.fields, actionsList);
 		addMovieInfo(movieInfoList.fields.info.mapValue.fields, movieInfo);
+		console.log(movieAddingTime);
 
-		if (movieAddingTime) {
-			movieInfoList.fields.addedTeme.integerValue = movieAddingTime;
-		} else {
-			movieInfoList.fields.addedTeme.integerValue = new Date().getTime();
-		}
+		console.log(
+			movieInfoList.fields.movieAddingTime.integerValue,
+			movieInfoList
+		);
 
 		try {
 			firebaseAxios.patch(
@@ -164,7 +170,7 @@ export class userMovieApi {
 			);
 
 			firebaseAxios.patch(
-				`https://firestore.googleapis.com/v1/projects/${FIREBASE_ID}/databases/(default)/documents/MovieList2/${movieInfoList.fields.addedTeme.integerValue}`,
+				`https://firestore.googleapis.com/v1/projects/${FIREBASE_ID}/databases/(default)/documents/MovieList2/${movieAddingTime}`,
 				movieInfoList
 			);
 		} catch (e) {

@@ -1,7 +1,5 @@
 <script setup>
-defineEmits({
-	activeTab: null,
-});
+defineEmits(['activeTab']);
 
 defineProps({
 	activeLink: {

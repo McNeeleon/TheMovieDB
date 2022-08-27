@@ -1,6 +1,5 @@
 <script setup>
 import { ref } from 'vue';
-import { useRouter } from 'vue-router';
 
 const props = defineProps({
 	movie: {
@@ -13,13 +12,7 @@ const props = defineProps({
 	},
 });
 
-const router = useRouter();
-
 const lazyImage = ref(null);
-
-const toMovue = () => {
-	router.push({ name: 'media', params: { id: props.movie.id } });
-};
 
 defineExpose({
 	lazyImage,
@@ -28,28 +21,29 @@ defineExpose({
 
 <template>
 	<div class="card border-0">
-		<a
-			href="#"
+		<router-link
+			:to="{ name: 'media', params: { id: movie.id } }"
 			class="d-block"
-			@click.prevent="toMovue"
 		>
 			<img
 				ref="lazyImage"
+				loading="lazy"
 				:data-src="lazy ? movie.image : ''"
 				:src="lazy ? '/src/assets/img_placeholder.png' : movie.image"
 				width="165"
 				height="200"
-				class="img-fluid rounded-3 shadow lazy-img"
+				style="width: 100%; height: 270px; object-fit: cover"
+				class="rounded-3 shadow"
 			/>
-		</a>
+		</router-link>
 
 		<div class="card-body text-start p-0 pt-2">
 			<h5 class="card-title p-0 m-0">
-				<a
+				<router-link
+					:to="{ name: 'media', params: { id: props.movie.id } }"
 					href="#"
 					class="nav-link link-dark fw-600 p-0"
-					@click.prevent="action"
-					>{{ movie.title }}</a
+					>{{ movie.title }}</router-link
 				>
 			</h5>
 			<p class="card-text fw-normal">{{ movie.year }}</p>
@@ -61,11 +55,6 @@ defineExpose({
 .card {
 	background-color: transparent !important;
 
-	img {
-		width: 100%;
-		object-fit: fill;
-	}
-
 	.card-title a:hover {
 		color: rgb(1, 180, 228);
 	}
@@ -75,6 +64,12 @@ defineExpose({
 	}
 	.card-title a {
 		font-size: 17px;
+	}
+}
+@media (max-width: 576px) {
+	.card img {
+		width: 100% !important;
+		height: auto !important;
 	}
 }
 </style>

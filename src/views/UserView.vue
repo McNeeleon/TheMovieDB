@@ -1,5 +1,4 @@
 <script setup>
-import category from '../components/UserCategoryList.vue';
 import profile from '../components/UserProfile.vue';
 import votes from '../components/UserVotes.vue';
 import AppTabs from '../components/AppTabs.vue';
@@ -8,7 +7,7 @@ import useTabControl from '../use/useTabControl';
 
 const { handlerTab, currTab } = useTabControl();
 
-const tabs = { profile, votes, category };
+const tabs = { profile, votes };
 </script>
 
 <template>

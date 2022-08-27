@@ -1,12 +1,10 @@
 <script setup>
-import { computed, ref } from '@vue/reactivity';
-import { onMounted } from 'vue';
+import { ref } from '@vue/reactivity';
 
 import CategoryCardMovies from '../components/CategoryCardMovies.vue';
 import AppPreloader from './AppPreloader.vue';
 
-import { ImdbApi } from '../api/movies-api';
-// import { popularSerial } from '../utils/serial';
+import useLoadCategory from '../use/useLoadCategory';
 
 const props = defineProps({
 	mediaType: {
@@ -16,22 +14,12 @@ const props = defineProps({
 });
 
 const popularMedia = ref([]);
-// const popularMedia = popularSerial;
+
 const popularLoading = ref(true);
 
-const apiType = computed(() =>
-	props.mediaType === 'movie' ? 'getPopularMovies' : 'getPopularSerial'
-);
-console.log(apiType.value);
+const API = ['getPopularMovies', 'getPopularSerial'];
 
-const getData = () => {
-	popularLoading.value = true;
-	ImdbApi[apiType.value]().then((response) => {
-		popularMedia.value = response;
-		popularLoading.value = false;
-	});
-};
-onMounted(getData);
+useLoadCategory(popularMedia, 'movie', popularLoading, props.mediaType, API);
 </script>
 
 <template>

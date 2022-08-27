@@ -51,13 +51,13 @@ const observerCalback = () => {
 
 			mediaList.value.push(...movieData);
 		})
-		.catch((_) => observing.unobserve(obserEl.value))
+		.catch((e) => {
+			observing.unobserve(obserEl.value);
+		})
 		.finally((_) => (lazyLoading.value = false));
 };
 
 const observing = observer(observerCalback);
-
-// const sortedMovieList = [...props.dataMovie].sort((a, b) => sortByDate(b, a));
 </script>
 
 <script>

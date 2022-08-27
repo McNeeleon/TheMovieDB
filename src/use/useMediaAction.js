@@ -47,18 +47,25 @@ export default (
 		'countries',
 	];
 
+	const setAddTime = () =>
+		movieAddingTime.value || (movieAddingTime.value = new Date().getTime());
+
 	const setRating = (rat) => {
 		movieVote.value = rat;
 
 		const item = actionsList.value.find((el) => el.id === 'watched');
+
+		moviesCounterStore.ratingCounter(
+			['watched', item.inList],
+			mediaData.value.type,
+			mediaData.value.runtimeMins
+		);
 		item.inList = true;
 
-		moviesCounterStore.movieCounter(
-			['watched', item.inList],
-			mediaData.value.type
-		);
-
 		const movieInfo = getObjectByArray(infoMap, mediaData.value);
+
+		setAddTime();
+		console.log(movieAddingTime);
 
 		userMovieApi.postUserMovieInfo(
 			actionsList,
@@ -78,10 +85,13 @@ export default (
 
 		moviesCounterStore.movieCounter(
 			[options.id, options.inList],
-			mediaData.value.type
+			mediaData.value.type,
+			mediaData.value.runtimeMins
 		);
 
 		const movieInfo = getObjectByArray(infoMap, mediaData.value);
+
+		setAddTime();
 
 		userMovieApi.postUserMovieInfo(
 			actionsList,
@@ -103,6 +113,8 @@ export default (
 		);
 
 		const movieInfo = getObjectByArray(infoMap, mediaData.value);
+
+		setAddTime();
 
 		userMovieApi.postUserMovieInfo(
 			actionsList,

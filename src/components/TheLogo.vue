@@ -1,7 +1,7 @@
 <template>
 	<div
 		class="d-flex align-items-center"
-		style="cursor: pointer"
+		style="cursor: pointer; z-index: 1"
 	>
 		<svg
 			xmlns="http://www.w3.org/2000/svg"

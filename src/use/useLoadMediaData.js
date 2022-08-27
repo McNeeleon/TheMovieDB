@@ -8,7 +8,6 @@ const mediaImages = ref([]);
 
 const imgObserver = ref(null);
 
-const isLoading = ref(true);
 const isImgLoading = ref(true);
 
 export default (
@@ -17,12 +16,13 @@ export default (
 	actionsList,
 	mediaData,
 	movieAddingTime,
-	movieVote
+	movieVote,
+	isLoading
 ) => {
 	const loadMovieById = () => {
+		isLoading.value = true;
 		ImdbApi.getTitleById(id, ['Ratings'])
 			.then((res) => {
-				isLoading.value = true;
 				mediaData.value = res;
 				isLoading.value = false;
 			})
@@ -37,7 +37,7 @@ export default (
 		userMovieApi
 			.getUserMovieInfoById(id)
 			.then((response) => {
-				movieAddingTime.value = response.addedTeme;
+				movieAddingTime.value = response.movieAddingTime;
 				actionsList.value.map((el) =>
 					Object.assign(el, {
 						inList: response.list[el.id].booleanValue,

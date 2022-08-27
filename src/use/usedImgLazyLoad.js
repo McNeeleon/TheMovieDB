@@ -15,7 +15,7 @@ export default function (item) {
 
 	const options = {
 		rootMargin: '0px',
-		threshold: 0.25,
+		threshold: 0.1,
 	};
 	const observer = new IntersectionObserver(callback, options);
 

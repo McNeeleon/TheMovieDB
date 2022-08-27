@@ -1,11 +1,10 @@
 <script setup>
-import { computed, ref } from '@vue/reactivity';
-import { onMounted } from 'vue';
+import { ref } from '@vue/reactivity';
 
 import CategoryCardMovies from '../components/CategoryCardMovies.vue';
 import AppPreloader from './AppPreloader.vue';
 
-import { ImdbApi } from '../api/movies-api';
+import useLoadCategory from '../use/useLoadCategory';
 
 const props = defineProps({
 	mediaType: {
@@ -18,19 +17,9 @@ const topMedia = ref([]);
 
 const topLoading = ref(true);
 
-const apiType = computed(() =>
-	props.mediaType === 'movie' ? 'getTopMovies' : 'getTopSerial'
-);
+const API = ['getTopMovies', 'getTopSerial'];
 
-const getMedia = () => {
-	topLoading.value = true;
-	ImdbApi[apiType.value]().then((response) => {
-		topMedia.value = response;
-		topLoading.value = false;
-	});
-};
-
-onMounted(getMedia);
+useLoadCategory(topMedia, 'movie', topLoading, props.mediaType, API);
 </script>
 
 <template>

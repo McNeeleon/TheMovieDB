@@ -7,7 +7,7 @@ import MediaActions from './MediaActions.vue';
 
 import { getObjectByArray } from '../utils/getObjectByArray';
 
-const emit = defineEmits(['addToWatchList', 'addToWatchLater']);
+const emits = defineEmits(['addToWatchList', 'addToWatchLater']);
 
 const props = defineProps({
 	mediaData: {
@@ -46,7 +46,7 @@ const headerMap = [
 	'ratings',
 ];
 
-const addToWatchList = (options) => emit('addToWatchList', options);
+const addToWatchList = (options) => emits('addToWatchList', options);
 
 const headerInfo = getObjectByArray(headerMap, props.mediaData);
 
@@ -71,7 +71,7 @@ const starList = props.mediaData.actorList.filter((el) =>
 				>
 					<img
 						:src="mediaData.image"
-						style="width: 100%; height: auto"
+						style="width: 100%; height: auto; object-fit: cover"
 						width="250"
 						height="350"
 						class="mb-3 rounded"

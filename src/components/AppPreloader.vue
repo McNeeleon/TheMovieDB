@@ -29,7 +29,7 @@
 
 	<div
 		v-else
-		class="d-flex justify-content-center"
+		class="d-flex justify-content-center py-5"
 	>
 		<div
 			class="spinner-grow me-3"

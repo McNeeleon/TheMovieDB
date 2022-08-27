@@ -21,6 +21,7 @@ const lazyImg = ref(null);
 
 onMounted(() => {
 	const refImages = lazyImg.value.map((el) => el.lazyImage);
+
 	usedImgLazyLoad(refImages);
 });
 </script>
@@ -38,18 +39,3 @@ onMounted(() => {
 		/>
 	</div>
 </template>
-
-<style lang="scss">
-.lazy-img {
-	width: 100%;
-	height: 100%;
-	animation: gradient 1s infinite alternate linear;
-	background: rgba(128, 128, 128, 0.4);
-}
-
-@keyframes gradient {
-	100% {
-		background: rgb(230, 230, 230);
-	}
-}
-</style>

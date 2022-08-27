@@ -1,7 +1,7 @@
 <script setup>
 import AppBadge from './AppBadge.vue';
 
-import usedColorVote from '../use/usedColorVote';
+import useColorVote from '../use/useColorVote';
 
 defineProps({
 	vote: {
@@ -10,7 +10,7 @@ defineProps({
 	},
 });
 
-const { color } = usedColorVote();
+const { color } = useColorVote();
 </script>
 
 <template>

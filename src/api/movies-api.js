@@ -2,10 +2,14 @@ import { imbdbAxios, API_KEY } from '../axios/axios';
 
 export class ImdbApi {
 	static async getTitleById(titleId, options = []) {
-		const { data } = await imbdbAxios.get(
-			`/en/API/Title/${API_KEY}/${titleId}/${options}`
-		);
-		return data;
+		try {
+			const { data } = await imbdbAxios.get(
+				`/en/API/Title/${API_KEY}/${titleId}/${options}`
+			);
+			return data;
+		} catch (error) {
+			console.log(error);
+		}
 	}
 
 	static async getTitleImages(titleId) {
@@ -32,13 +36,22 @@ export class ImdbApi {
 		const { data } = await imbdbAxios.get(`en/API/MostPopularTVs/${API_KEY}`);
 
 		return data.items;
-		// console.log('getPopularSerial');
 	}
 
 	static async getTopSerial() {
 		const { data } = await imbdbAxios.get(`en/API/Top250TVs/${API_KEY}`);
 
 		return data.items;
-		// console.log('getTopSerial');
+	}
+
+	static async getInTheaters() {
+		const { data } = await imbdbAxios.get(`en/API/InTheaters/${API_KEY}`);
+
+		return data.items;
+	}
+
+	static async comingSoon() {
+		const { data } = await imbdbAxios.get(`en/API/ComingSoon/${API_KEY}`);
+		return data.items;
 	}
 }

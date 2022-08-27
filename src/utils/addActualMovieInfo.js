@@ -11,7 +11,12 @@ export const addMovieInfo = (movieInfoList, movieInfo) => {
 		const sameItem = movieInfo[key];
 		const element = movieInfoList[key];
 		for (const sub in element) {
-			element[sub] = sub === 'integerValue' ? Number(sameItem) : sameItem;
+			element[sub] =
+				sub === 'integerValue'
+					? Number(sameItem)
+					: sameItem === null
+					? 0
+					: sameItem;
 		}
 	}
 };

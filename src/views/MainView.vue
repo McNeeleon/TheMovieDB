@@ -1,37 +1,26 @@
 <script setup>
-import { onMounted, ref } from 'vue';
-import { useRouter } from 'vue-router';
-
-// import { movies } from '../utils/movies';
-
 import SwiperSlider from '../components/SwiperSlider.vue';
-// import AppCardMovies from '../components/AppCardMovies.vue';
+
 import AppTitleLink from '../components/AppTitleLink.vue';
 import AppCardMovie from '../components/AppCardMovie.vue';
-// import AppTitle from '../components/AppTitle.vue';
 
 import AppPreloader from '../components/AppPreloader.vue';
 
-import { ImdbApi } from '../api/movies-api';
+import useLoadData from '../use/useLoadData';
 
-const router = useRouter();
+const {
+	loadingInTheater,
+	loadingPopularMovie,
+	loadingPopularSerial,
 
-const popularMovies = ref({});
+	inTheaters,
+	popularMovies,
+	popularSerial,
 
-const isLoading = ref(true);
-
-onMounted(() => {
-	isLoading.value = true;
-	ImdbApi.getPopularMovies().then((response) => {
-		popularMovies.value = response;
-		isLoading.value = false;
-	});
-
-	// popularMovies.value = movies;
-});
-
-const getMovieId = (id) => router.push({ name: 'media', params: { id } });
-console.log(getMovieId);
+	inTheaterRef,
+	popularMovieRef,
+	popularSerialRef,
+} = useLoadData();
 
 const breakpointsPopular = {
 	450: {
@@ -60,63 +49,81 @@ const breakpointsPopular = {
 		spaceBetween: 10,
 	},
 };
-
-// const breakpointsBornToday = {
-// 	576: {
-// 		slidesPerView: 5,
-// 		spaceBetween: 10,
-// 	},
-// 	640: {
-// 		slidesPerView: 6,
-// 		spaceBetween: 10,
-// 	},
-// 	768: {
-// 		slidesPerView: 7,
-// 		spaceBetween: 10,
-// 	},
-// 	1024: {
-// 		slidesPerView: 8,
-// 		spaceBetween: 10,
-// 	},
-// 	1400: {
-// 		slidesPerView: 9,
-// 		spaceBetween: 10,
-// 	},
-// };
 </script>
 
 <template>
 	<div class="container-xl">
-		<div
-			v-if="!isLoading"
-			class="bg-white"
-		>
+		<div class="bg-white">
 			<section class="section_poster mb-5">
 				<div
 					class="h-100 d-flex justify-content-start align-items-center text-start"
 				>
 					<div class="title text-white p-3 ms-4">
-						<h2 class="fw-bold fs-1 m-0">Добро пожаловать.</h2>
+						<h2 class="fw-bold fs-1 m-0">Welcome.</h2>
 						<h3 class="fs-2.fw-600">
-							Миллионы фильмов, сериалов и людей. Исследуйте сейчас.
+							Millions of movies, series and people. Explore now.
 						</h3>
 					</div>
 				</div>
 			</section>
-
-			<section class="section_popular mb-5 px-2">
-				<!-- <router-link
-        to="/popular"
-        class="border-start border-5 border-warning fs-3 fw-600 ps-2 nav-link p-0 mb-2"
-        style="color: #121212"
-      >
-        Popular
-      </router-link> -->
-				<!-- <AppLink>Popular</AppLink> -->
-
-				<AppTitleLink to="/popular">Popular</AppTitleLink>
+			<section
+				ref="inTheaterRef"
+				class="mb-5 px-2"
+			>
+				<AppTitleLink to="/InTheater">In theaters</AppTitleLink>
 
 				<SwiperSlider
+					v-if="!loadingInTheater"
+					:data="inTheaters"
+					:breakpoints="breakpointsPopular"
+					scrollbar
+					:slides-view="2"
+					#="{ item }"
+				>
+					<AppCardMovie :movie="item" />
+				</SwiperSlider>
+
+				<AppPreloader
+					v-else
+					size="fit"
+				/>
+			</section>
+
+			<section
+				ref="popularSerialRef"
+				class="mb-5 px-2"
+			>
+				<AppTitleLink :to="{ name: 'serial', params: { categor: 'popular' } }"
+					>Popular serials</AppTitleLink
+				>
+
+				<SwiperSlider
+					v-if="!loadingPopularSerial"
+					:data="popularSerial"
+					:breakpoints="breakpointsPopular"
+					scrollbar
+					:slides-view="2"
+					#="{ item }"
+				>
+					<AppCardMovie :movie="item" />
+				</SwiperSlider>
+
+				<AppPreloader
+					v-else
+					size="fit"
+				/>
+			</section>
+
+			<section
+				ref="popularMovieRef"
+				class="mb-5 px-2"
+			>
+				<AppTitleLink :to="{ name: 'movie', params: { categor: 'popular' } }"
+					>Popular movies</AppTitleLink
+				>
+
+				<SwiperSlider
+					v-if="!loadingPopularMovie"
 					:data="popularMovies"
 					:breakpoints="breakpointsPopular"
 					scrollbar
@@ -125,54 +132,12 @@ const breakpointsPopular = {
 				>
 					<AppCardMovie :movie="item" />
 				</SwiperSlider>
+				<AppPreloader
+					v-else
+					size="fit"
+				/>
 			</section>
-
-			<div>
-				<!-- <AppCardMovies ref="test" /> -->
-			</div>
-
-			<!-- <section class="section_born">
-				<AppTitle>Born today</AppTitle>
-				<SwiperSlider
-					:data="bornTodayList"
-					:breakpoints="breakpointsBornToday"
-					#="{ item, index }"
-				>
-					<div
-						:key="index"
-						class="card border-0 align-items-center"
-					>
-						<img
-							:src="item.photo"
-							class=""
-							style="width: 100%; max-height: 190px; object-fit: contain"
-						/>
-
-						<div class="card-body p-0">
-							<a class="card-title fs-6 fw-600 text-dark text-decoration-none">
-								{{ item.enName }}
-							</a>
-							<p class="card-text">{{ item.age }}</p>
-						</div>
-					</div>
-				</SwiperSlider>
-			</section> -->
-			<!--
-		<section class="section_trending mb-5">
-			<h3 class="border-start border-5 border-warning fw-600 ps-2">Rending</h3> -->
-
-			<!-- <SwiperSlider
-        :data="data"
-        #="{ item }"
-      >
-        <CardMovie
-          :item="item"
-          card-size="smCard"
-        />
-      </SwiperSlider> -->
-			<!-- </section> -->
 		</div>
-		<AppPreloader v-else />
 	</div>
 </template>
 

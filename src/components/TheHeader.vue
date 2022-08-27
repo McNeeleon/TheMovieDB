@@ -1,90 +1,113 @@
-<template>
-	<header class="sticky-top">
-		<nav class="container-xl">
-			<div class="d-inline-flex align-items-center w-100">
-				<div
-					class="menu"
-					:class="{ show: isShow }"
-					@mouseenter="isShow = true"
-					@mouseleave="isShow = false"
-				>
-					<div
-						class="d-inline-flex py-3"
-						style="z-index: 100; position: relative"
-					>
-						<button class="btn btn-toggle">
-							<svg
-								xmlns="http://www.w3.org/2000/svg"
-								viewBox="0 0 448 512"
-								width="20"
-								height="20"
-								fill="#6c757d"
-								class="me-1"
-							>
-								<path
-									d="M0 96C0 78.33 14.33 64 32 64H416C433.7 64 448 78.33 448 96C448 113.7 433.7 128 416 128H32C14.33 128 0 113.7 0 96zM0 256C0 238.3 14.33 224 32 224H416C433.7 224 448 238.3 448 256C448 273.7 433.7 288 416 288H32C14.33 288 0 273.7 0 256zM416 448H32C14.33 448 0 433.7 0 416C0 398.3 14.33 384 32 384H416C433.7 384 448 398.3 448 416C448 433.7 433.7 448 416 448z"
-								/>
-							</svg>
-						</button>
-						<TheLogo
-							class="me-2"
-							@click="$router.push({ name: 'main' })"
-						/>
-					</div>
-					<TheHeaderMenuDropdown />
-				</div>
-
-				<div class="ms-auto">
-					<div class="d-flex">
-						<TheHeaderSearchForm />
-
-						<div class="fw-normal">
-							<router-link
-								:to="{ name: 'user', params: { categor: 'profile' } }"
-								href="#"
-								class="nav-link p-0"
-							>
-								<span class="avatar blue">N</span>
-							</router-link>
-						</div>
-					</div>
-				</div>
-			</div>
-		</nav>
-	</header>
-</template>
-
 <script setup>
 import { ref } from 'vue';
+import { useRouter } from 'vue-router';
 
 import TheLogo from './TheLogo.vue';
 import TheHeaderSearchForm from './TheHeaderSearchForm.vue';
-import TheHeaderMenuDropdown from './TheHeaderMenuDropdown.vue';
 
-const isShow = ref(false);
+import TheHeaderMobileMenu from './TheHeaderMobileMenu.vue';
+
+import TheHeaderSearchResult from './theHeaderSearchResult.vue';
+
+import useSearchMovie from '../use/useSearchMovie';
+import TheHeaderNav from './TheHeaderNav.vue';
+
+const router = useRouter();
+
+const menuIsOpen = ref(false);
+
+const menuItems = [
+	{ name: 'main', icon: 'home' },
+	{ name: 'user', icon: 'person', params: 'profile' },
+	{ name: 'movie', icon: 'movie', params: 'popular' },
+	{ name: 'serial', icon: 'serial', params: 'popular' },
+];
+
+const {
+	searchMovie,
+	searchResultIsOpen,
+	searchedMedia,
+	searchedError,
+	search,
+	searchStore,
+} = useSearchMovie(router);
+
+const clearSearchInput = () => {
+	search.value = '';
+	searchStore.clearStore();
+};
+
+const closeSearchResult = (e) => {
+	if (!e.classList.contains('search-form')) {
+		searchResultIsOpen.value = false;
+	}
+};
+
+const openSearchResult = () => {
+	if (searchedMedia.value.length || searchedError.value) {
+		searchResultIsOpen.value = true;
+	}
+};
+
+const mobileMenuHandler = () => {
+	menuIsOpen.value = !menuIsOpen.value;
+	menuIsOpen.value
+		? (document.body.style.overflow = 'hidden')
+		: (document.body.style.overflow = '');
+};
+
+router.beforeEach((to, from, next) => {
+	if (to.name === 'media' || from.name === 'search') {
+		searchResultIsOpen.value = false;
+		next();
+	} else {
+		next();
+	}
+});
 </script>
+
+<template>
+	<header class="sticky-top">
+		<div class="container-xl">
+			<div class="d-flex align-items-center">
+				<TheHeaderNav
+					:menu-items="menuItems"
+					@mobile-menu-handler="mobileMenuHandler"
+				/>
+				<TheLogo
+					class="ms-auto ms-md-0"
+					@click="$router.push({ name: 'main' })"
+				/>
+
+				<div class="search ms-auto">
+					<TheHeaderSearchForm
+						v-model="search"
+						@search-movie="searchMovie"
+						@open-search-result="openSearchResult"
+						@clear-search-input="clearSearchInput"
+					/>
+
+					<TheHeaderSearchResult
+						:search-input="search"
+						:searched-media="searchedMedia"
+						:search-result-is-open="searchResultIsOpen"
+						:search-error="searchedError"
+						@close-search-result="closeSearchResult"
+					/>
+				</div>
+			</div>
+		</div>
+	</header>
+	<TheHeaderMobileMenu
+		:is-open="menuIsOpen"
+		:menu-items="menuItems"
+		@close-mobile-menu="mobileMenuHandler"
+	/>
+</template>
 
 <style lang="scss">
 header {
 	background-color: #1f1f1f;
-
-	.avatar {
-		position: relative;
-		top: 0;
-		left: 15%;
-		width: 32px;
-		height: 32px;
-		text-align: center;
-		text-transform: uppercase;
-		border-radius: 50%;
-		color: #fff;
-		font-size: 0.9em;
-		font-weight: 600;
-		display: flex;
-		align-items: center;
-		justify-content: center;
-		background-color: #0177d2;
-	}
 
 	.btn-toggle {
 		display: flex;
@@ -94,6 +117,16 @@ header {
 	.menu {
 		width: fit-content;
 		position: relative;
+	}
+}
+
+.search {
+	position: relative;
+}
+
+@media (max-width: 768px) {
+	.search {
+		position: inherit;
 	}
 }
 </style>

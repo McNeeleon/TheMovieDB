@@ -1,18 +1,8 @@
-<template>
-	<div>
-		<apexchart
-			id="chart"
-			type="area"
-			height="350px"
-			:options="chartOptions"
-			:series="series"
-		></apexchart>
-	</div>
-</template>
-
 <script>
-import VueApexCharts from 'vue3-apexcharts';
 import { ref } from 'vue';
+
+import VueApexCharts from 'vue3-apexcharts';
+
 import { formatDate } from '../utils/formatDate';
 
 export default {
@@ -21,6 +11,7 @@ export default {
 	},
 };
 </script>
+
 <script setup>
 const props = defineProps({
 	mediaData: {
@@ -169,6 +160,19 @@ const chartOptions = {
 	],
 };
 </script>
+
+<template>
+	<div>
+		<apexchart
+			id="chart"
+			type="area"
+			height="350px"
+			:options="chartOptions"
+			:series="series"
+		></apexchart>
+	</div>
+</template>
+
 <style lang="scss">
 #chart {
 	margin: 35px auto;

@@ -9,14 +9,13 @@
 					class="card border-0 mb-2 me-2 me-sm-4 me-md-0"
 					style="width: 6.5rem"
 				>
-					<!-- <div style="width: 200px; height: 250px"> -->
 					<img
 						:src="item.image"
 						style="width: 100%; height: 130px; object-fit: cover"
 						:alt="item.name"
 						class="rounded"
 					/>
-					<!-- </div> -->
+
 					<div class="card-body p-0 mb-1">
 						<p
 							class="card-title mb-1 fw-600"
@@ -50,11 +49,4 @@ defineProps({
 });
 </script>
 
-<style lang="scss">
-@media (max-width: 576px) {
-}
-
-.star-cards {
-	// margin-left: auto;
-}
-</style>
+<style lang="scss"></style>
