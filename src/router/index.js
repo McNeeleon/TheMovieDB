@@ -38,6 +38,11 @@ const routes = [
 		name: 'InTheater',
 		component: () => import('../views/InTheaterView.vue'),
 	},
+	{
+		path: '/error/:message',
+		name: 'error',
+		component: () => import('../views/ErrorView.vue'),
+	},
 ];
 
 const router = createRouter({
