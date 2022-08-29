@@ -5,7 +5,7 @@
 			style="max-width: 960px"
 		>
 			<div class="py-4">
-				<ul class="nav justify-content-center mb-3 social">
+				<ul class="nav justify-content-center mb-4 social">
 					<li class="nav-item">
 						<a
 							href="#"
@@ -127,8 +127,10 @@
 footer {
 	background-color: #121212;
 
-	li + li {
-		margin-left: 75px !important;
+	.social {
+		li + li {
+			margin-left: 15% !important;
+		}
 	}
 	svg {
 		width: 18px;
