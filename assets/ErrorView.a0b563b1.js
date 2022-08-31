@@ -1,0 +1,1 @@
+import{b as t,c as s,d as a,t as r}from"./index.a2adb55a.js";const c={class:"containter"},o={class:"alert alert-danger py-3 fs-3 text-center"},d={props:{message:{type:String,default:""}},setup(e){return(n,i)=>(t(),s("div",c,[a("div",o,r(e.message),1)]))}};export{d as default};
